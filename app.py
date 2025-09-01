@@ -31,7 +31,7 @@ st.markdown(
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         margin-bottom: 1rem;
         padding: 1.5rem;
     }
@@ -80,14 +80,14 @@ st.markdown(
         border: 1px solid rgba(0, 245, 255, 0.3);
         box-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
     }
-    
+
     /* 指标值 - 保持原样 */
     [data-testid="stMetricValue"] {
         color: #ff00ff;
         font-weight: 700;
         font-size: 24px;
     }
-    
+
     /* 指标标签 - 增大SWOT标签字体并添加霓虹效果 */
     [data-testid="stMetricLabel"] {
         font-size: 1.8rem !important;
@@ -97,7 +97,7 @@ st.markdown(
         text-shadow: 0 0 5px #00f5ff, 0 0 10px #00f5ff, 0 0 15px #00f5ff;
         animation: neonGlow 1.5s infinite alternate;
     }
-    
+
     /* 霓虹光效动画 */
     @keyframes neonGlow {
         from {
@@ -107,7 +107,7 @@ st.markdown(
             text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff, 0 0 30px #00f5ff, 0 0 40px #00f5ff;
         }
     }
-    
+
     /* 指标变化 - 保持原样 */
     [data-testid="stMetricDelta"] {
         font-weight: 600;
@@ -117,12 +117,12 @@ st.markdown(
     .css-1d391kg {
         background: rgba(0, 0, 0, 0.25) !important;
     }
-    
+
     /* 强制所有radio选项文字为白色 */
     .stRadio label {
         color: white !important;
     }
-    
+
     /* 更具体的选择器确保文字颜色 */
     div[data-testid="stRadio"] label,
     div[data-testid="stRadio"] label span,
@@ -130,7 +130,7 @@ st.markdown(
     .st-bx label span {
         color: white !important;
     }
-    
+
     /* 针对Streamlit新版本的radio按钮样式 */
     .st-cc label,
     .st-cc label span,
@@ -140,24 +140,24 @@ st.markdown(
     .st-ce label span {
         color: white !important;
     }
-    
+
     /* 确保所有文本元素在暗色背景下可见 */
     .stRadio > label,
     .stRadio > div > label,
     .stRadio > div > div > label {
         color: white !important;
     }
-    
+
     /* 针对选项文字的特殊处理 */
     .st-ae, .st-af, .st-ag, .st-ah, .st-ai {
         color: white !important;
     }
-    
+
     /* 选项卡按钮样式 */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
     }
-    
+
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         padding: 10px 20px;
@@ -168,13 +168,13 @@ st.markdown(
         border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
     }
-    
+
     .stTabs [data-baseweb="tab"]:hover {
         background: rgba(0, 245, 255, 0.2);
         border: 1px solid #00f5ff;
         box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
     }
-    
+
     .stTabs [aria-selected="true"] {
         background: linear-gradient(90deg, #00f5ff, #ff00ff);
         color: #0f0c29 !important;
@@ -182,7 +182,7 @@ st.markdown(
         box-shadow: 0 0 15px #00f5ff, 0 0 25px #ff00ff;
         border: none;
     }
-    
+
     /* 选项卡内容区域 */
     [data-testid="stVerticalBlock"] > [style*="flex-direction: column;"] > [data-testid="stVerticalBlock"] {
         border-radius: 12px;
@@ -190,6 +190,76 @@ st.markdown(
         margin-top: 1rem;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* 移动端适配 - 新增媒体查询 */
+    @media screen and (max-width: 768px) {
+        /* 调整全局字体大小 */
+        .stApp {
+            font-size: 14px;
+        }
+        
+        /* 调整标题大小 */
+        h1 {
+            font-size: 1.8rem !important;
+        }
+        
+        h2 {
+            font-size: 1.5rem !important;
+        }
+        
+        h3 {
+            font-size: 1.2rem !important;
+        }
+        
+        /* 调整指标标签大小 */
+        [data-testid="stMetricLabel"] {
+            font-size: 1.4rem !important;
+        }
+        
+        /* 调整指标值大小 */
+        [data-testid="stMetricValue"] {
+            font-size: 20px !important;
+        }
+        
+        /* 调整选项卡样式 */
+        .stTabs [data-baseweb="tab"] {
+            height: 40px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        /* 调整按钮大小 */
+        .stButton > button {
+            padding: 0.5rem 1rem;
+            font-size: 14px;
+        }
+        
+        /* 调整单选按钮大小 */
+        .stRadio > div[role="radiogroup"] label {
+            padding: 0.4rem 0.8rem;
+            font-size: 14px;
+        }
+        
+        /* 调整卡片内边距 */
+        .glass-card {
+            padding: 1rem;
+        }
+        
+        /* 调整进度条高度 */
+        .stProgress > div > div {
+            height: 12px;
+        }
+        
+        /* 调整布局间距 */
+        .stColumn {
+            margin-bottom: 1rem;
+        }
+        
+        /* 调整测试说明框 */
+        .stAlert {
+            font-size: 13px;
+        }
     }
     </style>
     """,
