@@ -11,116 +11,115 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* 全局底色 & 字体 */
+    /* 全局底色 & 字体 - 改为亮色 */
     .stApp {
-        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-        color: #e0e0e0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 50%, #d8dee9 100%);
+        color: #2d3748;
         font-family: 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* 标题发光文字 */
+    /* 标题文字 - 改为深色 */
     h1, h2, h3 {
-        color: #00f5ff !important;
-        text-shadow: 0 0 8px #00f5ff;
+        color: #2d3748 !important;
+        text-shadow: none;
     }
 
-    /* 卡片/容器：毛玻璃 + 霓虹边框 */
+    /* 卡片/容器：简洁白色 */
     .glass-card {
-        background: rgba(255, 255, 255, 0.06);
-        border-radius: 16px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border: 1px solid rgba(255, 255, 255, 0.8);
         margin-bottom: 1rem;
         padding: 1.5rem;
     }
 
-    /* 进度条：赛博霓虹 */
+    /* 进度条：简洁蓝色 */
     .stProgress > div > div {
-        background: linear-gradient(90deg, #00f5ff, #ff00ff);
-        border-radius: 10px;
+        background: linear-gradient(90deg, #4299e1, #3182ce);
+        border-radius: 8px;
     }
 
-    /* 按钮：霓虹发光 */
+    /* 按钮：简洁蓝色 */
     .stButton > button {
         border: none;
-        color: #0f0c29;
-        background: linear-gradient(90deg, #00f5ff, #ff00ff);
+        color: white;
+        background: linear-gradient(90deg, #4299e1, #3182ce);
         padding: 0.75rem 1.5rem;
-        border-radius: 999px;
+        border-radius: 8px;
         font-weight: 600;
-        box-shadow: 0 0 10px #00f5ff, 0 0 20px #ff00ff;
+        box-shadow: 0 2px 4px rgba(66, 153, 225, 0.5);
         transition: all 0.3s ease;
     }
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 15px #00f5ff, 0 0 30px #ff00ff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(66, 153, 225, 0.6);
     }
 
-    /* 选项单选：悬浮霓虹 */
+    /* 选项单选：简洁样式 */
     .stRadio > div[role="radiogroup"] label {
-        background: rgba(255, 255, 255, 0.07);
-        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
         padding: 0.5rem 1rem;
         margin-bottom: 0.5rem;
         transition: all 0.3s;
-        color: #ffffff !important;
+        color: #2d3748 !important;
+        border: 1px solid #e2e8f0;
     }
     .stRadio > div[role="radiogroup"] label:hover {
-        background: rgba(0, 245, 255, 0.2);
-        box-shadow: 0 0 8px #00f5ff;
+        background: rgba(66, 153, 225, 0.1);
+        border: 1px solid #4299e1;
+        box-shadow: none;
     }
 
-    /* 指标卡：透明底 + 霓虹字 */
+    /* 指标卡：白色背景 */
     div[data-testid="metric-container"] {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 12px;
         padding: 1rem;
-        border: 1px solid rgba(0, 245, 255, 0.3);
-        box-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
-    /* 指标值 - 保持原样 */
+    /* 指标值 - 蓝色 */
     [data-testid="stMetricValue"] {
-        color: #ff00ff;
+        color: #3182ce;
         font-weight: 700;
         font-size: 24px;
     }
 
-    /* 指标标签 - 增大SWOT标签字体并添加霓虹效果 */
+    /* 指标标签 - 普通样式 */
     [data-testid="stMetricLabel"] {
-        font-size: 1.8rem !important;
-        font-weight: 700;
-        color: #e0e0e0 !important;
+        font-size: 1.2rem !important;
+        font-weight: 600;
+        color: #4a5568 !important;
         margin-bottom: 0.5rem;
-        text-shadow: 0 0 5px #00f5ff, 0 0 10px #00f5ff, 0 0 15px #00f5ff;
-        animation: neonGlow 1.5s infinite alternate;
+        text-shadow: none;
+        animation: none;
     }
 
-    /* 霓虹光效动画 */
+    /* 移除霓虹光效动画 */
     @keyframes neonGlow {
-        from {
-            text-shadow: 0 0 5px #00f5ff, 0 0 10px #00f5ff, 0 0 15px #00f5ff;
-        }
-        to {
-            text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff, 0 0 30px #00f5ff, 0 0 40px #00f5ff;
+        from, to {
+            text-shadow: none;
         }
     }
 
-    /* 指标变化 - 保持原样 */
+    /* 指标变化 - 普通样式 */
     [data-testid="stMetricDelta"] {
         font-weight: 600;
     }
 
-    /* 侧边栏：半透明 */
+    /* 侧边栏：浅灰色 */
     .css-1d391kg {
-        background: rgba(0, 0, 0, 0.25) !important;
+        background: rgba(247, 250, 252, 0.95) !important;
     }
 
-    /* 强制所有radio选项文字为白色 */
+    /* 强制所有radio选项文字为深色 */
     .stRadio label {
-        color: white !important;
+        color: #2d3748 !important;
     }
 
     /* 更具体的选择器确保文字颜色 */
@@ -128,7 +127,7 @@ st.markdown(
     div[data-testid="stRadio"] label span,
     .st-bx label,
     .st-bx label span {
-        color: white !important;
+        color: #2d3748 !important;
     }
 
     /* 针对Streamlit新版本的radio按钮样式 */
@@ -138,19 +137,19 @@ st.markdown(
     .st-cd label span,
     .st-ce label,
     .st-ce label span {
-        color: white !important;
+        color: #2d3748 !important;
     }
 
-    /* 确保所有文本元素在暗色背景下可见 */
+    /* 确保所有文本元素在亮色背景下可见 */
     .stRadio > label,
     .stRadio > div > label,
     .stRadio > div > div > label {
-        color: white !important;
+        color: #2d3748 !important;
     }
 
     /* 针对选项文字的特殊处理 */
     .st-ae, .st-af, .st-ag, .st-ah, .st-ai {
-        color: white !important;
+        color: #2d3748 !important;
     }
 
     /* 选项卡按钮样式 */
@@ -161,25 +160,26 @@ st.markdown(
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         padding: 10px 20px;
-        font-size: 18px;
-        font-weight: bold;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #e2e8f0;
         transition: all 0.3s ease;
+        color: #4a5568;
     }
 
     .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(0, 245, 255, 0.2);
-        border: 1px solid #00f5ff;
-        box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+        background: rgba(66, 153, 225, 0.1);
+        border: 1px solid #4299e1;
+        box-shadow: none;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(90deg, #00f5ff, #ff00ff);
-        color: #0f0c29 !important;
-        font-weight: bold;
-        box-shadow: 0 0 15px #00f5ff, 0 0 25px #ff00ff;
+        background: linear-gradient(90deg, #4299e1, #3182ce);
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(66, 153, 225, 0.5);
         border: none;
     }
 
@@ -188,11 +188,11 @@ st.markdown(
         border-radius: 12px;
         padding: 1.5rem;
         margin-top: 1rem;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #e2e8f0;
     }
 
-    /* 移动端适配 - 新增媒体查询 */
+    /* 移动端适配 */
     @media screen and (max-width: 768px) {
         /* 调整全局字体大小 */
         .stApp {
@@ -201,31 +201,31 @@ st.markdown(
         
         /* 调整标题大小 */
         h1 {
-            font-size: 1.8rem !important;
-        }
-        
-        h2 {
             font-size: 1.5rem !important;
         }
         
+        h2 {
+            font-size: 1.3rem !important;
+        }
+        
         h3 {
-            font-size: 1.2rem !important;
+            font-size: 1.1rem !important;
         }
         
         /* 调整指标标签大小 */
         [data-testid="stMetricLabel"] {
-            font-size: 1.4rem !important;
+            font-size: 1rem !important;
         }
         
         /* 调整指标值大小 */
         [data-testid="stMetricValue"] {
-            font-size: 20px !important;
+            font-size: 18px !important;
         }
         
         /* 调整选项卡样式 */
         .stTabs [data-baseweb="tab"] {
             height: 40px;
-            padding: 8px 12px;
+            padding: 6px 12px;
             font-size: 14px;
         }
         
@@ -248,7 +248,7 @@ st.markdown(
         
         /* 调整进度条高度 */
         .stProgress > div > div {
-            height: 12px;
+            height: 10px;
         }
         
         /* 调整布局间距 */
