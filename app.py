@@ -11,115 +11,116 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* 全局底色 & 字体 - 改为亮色 */
+    /* 全局底色 & 字体 */
     .stApp {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 50%, #d8dee9 100%);
-        color: #2d3748;
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        color: #e0e0e0;
         font-family: 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* 标题文字 - 改为深色 */
+    /* 标题发光文字 */
     h1, h2, h3 {
-        color: #2d3748 !important;
-        text-shadow: none;
+        color: #00f5ff !important;
+        text-shadow: 0 0 8px #00f5ff;
     }
 
-    /* 卡片/容器：简洁白色 */
+    /* 卡片/容器：毛玻璃 + 霓虹边框 */
     .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        border: 1px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         margin-bottom: 1rem;
         padding: 1.5rem;
     }
 
-    /* 进度条：简洁蓝色 */
+    /* 进度条：赛博霓虹 */
     .stProgress > div > div {
-        background: linear-gradient(90deg, #4299e1, #3182ce);
-        border-radius: 8px;
+        background: linear-gradient(90deg, #00f5ff, #ff00ff);
+        border-radius: 10px;
     }
 
-    /* 按钮：简洁蓝色 */
+    /* 按钮：霓虹发光 */
     .stButton > button {
         border: none;
-        color: white;
-        background: linear-gradient(90deg, #4299e1, #3182ce);
+        color: #0f0c29;
+        background: linear-gradient(90deg, #00f5ff, #ff00ff);
         padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        border-radius: 999px;
         font-weight: 600;
-        box-shadow: 0 2px 4px rgba(66, 153, 225, 0.5);
+        box-shadow: 0 0 10px #00f5ff, 0 0 20px #ff00ff;
         transition: all 0.3s ease;
     }
     .stButton > button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(66, 153, 225, 0.6);
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px #00f5ff, 0 0 30px #ff00ff;
     }
 
-    /* 选项单选：简洁样式 */
+    /* 选项单选：悬浮霓虹 */
     .stRadio > div[role="radiogroup"] label {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
         padding: 0.5rem 1rem;
         margin-bottom: 0.5rem;
         transition: all 0.3s;
-        color: #2d3748 !important;
-        border: 1px solid #e2e8f0;
+        color: #ffffff !important;
     }
     .stRadio > div[role="radiogroup"] label:hover {
-        background: rgba(66, 153, 225, 0.1);
-        border: 1px solid #4299e1;
-        box-shadow: none;
+        background: rgba(0, 245, 255, 0.2);
+        box-shadow: 0 0 8px #00f5ff;
     }
 
-    /* 指标卡：白色背景 */
+    /* 指标卡：透明底 + 霓虹字 */
     div[data-testid="metric-container"] {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.05);
         border-radius: 12px;
         padding: 1rem;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        box-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
     }
 
-    /* 指标值 - 蓝色 */
+    /* 指标值 - 保持原样 */
     [data-testid="stMetricValue"] {
-        color: #3182ce;
+        color: #ff00ff;
         font-weight: 700;
         font-size: 24px;
     }
 
-    /* 指标标签 - 普通样式 */
+    /* 指标标签 - 增大SWOT标签字体并添加霓虹效果 */
     [data-testid="stMetricLabel"] {
-        font-size: 1.2rem !important;
-        font-weight: 600;
-        color: #4a5568 !important;
+        font-size: 1.8rem !important;
+        font-weight: 700;
+        color: #e0e0e0 !important;
         margin-bottom: 0.5rem;
-        text-shadow: none;
-        animation: none;
+        text-shadow: 0 0 5px #00f5ff, 0 0 10px #00f5ff, 0 0 15px #00f5ff;
+        animation: neonGlow 1.5s infinite alternate;
     }
 
-    /* 移除霓虹光效动画 */
+    /* 霓虹光效动画 */
     @keyframes neonGlow {
-        from, to {
-            text-shadow: none;
+        from {
+            text-shadow: 0 0 5px #00f5ff, 0 0 10px #00f5ff, 0 0 15px #00f5ff;
+        }
+        to {
+            text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff, 0 0 30px #00f5ff, 0 0 40px #00f5ff;
         }
     }
 
-    /* 指标变化 - 普通样式 */
+    /* 指标变化 - 保持原样 */
     [data-testid="stMetricDelta"] {
         font-weight: 600;
     }
 
-    /* 侧边栏：浅灰色 */
+    /* 侧边栏：半透明 */
     .css-1d391kg {
-        background: rgba(247, 250, 252, 0.95) !important;
+        background: rgba(0, 0, 0, 0.25) !important;
     }
 
-    /* 强制所有radio选项文字为深色 */
+    /* 强制所有radio选项文字为白色 */
     .stRadio label {
-        color: #2d3748 !important;
+        color: white !important;
     }
 
     /* 更具体的选择器确保文字颜色 */
@@ -127,7 +128,7 @@ st.markdown(
     div[data-testid="stRadio"] label span,
     .st-bx label,
     .st-bx label span {
-        color: #2d3748 !important;
+        color: white !important;
     }
 
     /* 针对Streamlit新版本的radio按钮样式 */
@@ -137,19 +138,19 @@ st.markdown(
     .st-cd label span,
     .st-ce label,
     .st-ce label span {
-        color: #2d3748 !important;
+        color: white !important;
     }
 
-    /* 确保所有文本元素在亮色背景下可见 */
+    /* 确保所有文本元素在暗色背景下可见 */
     .stRadio > label,
     .stRadio > div > label,
     .stRadio > div > div > label {
-        color: #2d3748 !important;
+        color: white !important;
     }
 
     /* 针对选项文字的特殊处理 */
     .st-ae, .st-af, .st-ag, .st-ah, .st-ai {
-        color: #2d3748 !important;
+        color: white !important;
     }
 
     /* 选项卡按钮样式 */
@@ -160,26 +161,25 @@ st.markdown(
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         padding: 10px 20px;
-        font-size: 16px;
-        font-weight: 600;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #e2e8f0;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
-        color: #4a5568;
     }
 
     .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(66, 153, 225, 0.1);
-        border: 1px solid #4299e1;
-        box-shadow: none;
+        background: rgba(0, 245, 255, 0.2);
+        border: 1px solid #00f5ff;
+        box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(90deg, #4299e1, #3182ce);
-        color: white !important;
-        font-weight: 600;
-        box-shadow: 0 2px 4px rgba(66, 153, 225, 0.5);
+        background: linear-gradient(90deg, #00f5ff, #ff00ff);
+        color: #0f0c29 !important;
+        font-weight: bold;
+        box-shadow: 0 0 15px #00f5ff, 0 0 25px #ff00ff;
         border: none;
     }
 
@@ -188,11 +188,11 @@ st.markdown(
         border-radius: 12px;
         padding: 1.5rem;
         margin-top: 1rem;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* 移动端适配 */
+    /* 移动端适配 - 新增媒体查询 */
     @media screen and (max-width: 768px) {
         /* 调整全局字体大小 */
         .stApp {
@@ -201,31 +201,31 @@ st.markdown(
         
         /* 调整标题大小 */
         h1 {
-            font-size: 1.5rem !important;
+            font-size: 1.8rem !important;
         }
         
         h2 {
-            font-size: 1.3rem !important;
+            font-size: 1.5rem !important;
         }
         
         h3 {
-            font-size: 1.1rem !important;
+            font-size: 1.2rem !important;
         }
         
         /* 调整指标标签大小 */
         [data-testid="stMetricLabel"] {
-            font-size: 1rem !important;
+            font-size: 1.4rem !important;
         }
         
         /* 调整指标值大小 */
         [data-testid="stMetricValue"] {
-            font-size: 18px !important;
+            font-size: 20px !important;
         }
         
         /* 调整选项卡样式 */
         .stTabs [data-baseweb="tab"] {
             height: 40px;
-            padding: 6px 12px;
+            padding: 8px 12px;
             font-size: 14px;
         }
         
@@ -248,7 +248,7 @@ st.markdown(
         
         /* 调整进度条高度 */
         .stProgress > div > div {
-            height: 10px;
+            height: 12px;
         }
         
         /* 调整布局间距 */
@@ -430,233 +430,276 @@ def show_test_interface():
         # 只保留测试说明，不再显示当前问题的SWOT类型
 
 def show_results_interface():
-    results = st.session_state.scorer.get_results()
-    scores = results["scores"]
-    details = results["details"]
-    
-    # 计算平均分
-    avg_s = scores["S"] / len([q for q in questions if q["type"] == "S"])
-    avg_w = scores["W"] / len([q for q in questions if q["type"] == "W"])
-    avg_o = scores["O"] / len([q for q in questions if q["type"] == "O"])
-    avg_t = scores["T"] / len([q for q in questions if q["type"] == "T"])
-    
-    # 创建选项卡界面
-    tab1, tab2, tab3 = st.tabs(["📊 总体分析", "🎯 SWOT矩阵", "💡 个性建议"])
-    
-    with tab1:
-        st.header("总体分析报告")
-        
-        # 分数卡片
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
-        with col2:
-            st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
-        with col3:
-            st.metric("🎯 机会", f"{avg_o:.1f}/5.0", f"{scores['O']}分")
-        with col4:
-            st.metric("⚠️ 威胁", f"{avg_t:.1f}/5.0", f"{scores['T']}分")
-        
-        # 总体评估
-        st.markdown("---")
-        if avg_s + avg_o > avg_w + avg_t:
-            st.success("### 🎉 积极前景")
-            st.markdown("""
-            **总体评估**: 你的外部机会与内部优势相结合，专升本成功几率较高！
-            
-            **核心优势**:
-            - 具有良好的执行力和目标感
-            - 能够把握外部机会
-            - 整体积极因素多于消极因素
-            
-            **建议**: 保持当前节奏，继续发挥优势，积极备考！
-            """)
-        else:
-            st.warning("### ⚠️ 需要重点关注")
-            st.markdown("""
-            **总体评估**: 你面临一些挑战，但只要针对性改进，完全有机会实现逆袭！
-            
-            **重点关注**:
-            - 需要改进某些方面的表现
-            - 建议寻求外部帮助和支持
-            - 制定详细的学习计划
-            
-            **建议**: 不要放弃，针对性改进后成功率会大幅提升！
-            """)
-    
-    with tab2:
-        st.header("SWOT分析矩阵")
+    res = st.session_state.scorer.get_results()
+    scores, details = res["scores"], res["details"]
+    avg = lambda t: scores[t] / len([q for q in questions if q["type"] == t])
+    avg_s, avg_w, avg_o, avg_t = avg("S"), avg("W"), avg("O"), avg("T")
 
-        # 1. 映射表
-        swot_labels = {
-            'S': ["执行力", "组织力", "洞察力", "目标感", "进取心"],
-            'W': ["依赖性", "拖延倾向", "信息局限", "考试焦虑", "韧性不足", "决策困难"],
-            'O': ["支持系统", "榜样引导", "环境利好", "趋势匹配", "变革机会"],
-            'T': ["同伴压力", "环境干扰", "时机紧迫", "竞争激烈"]
-        }
+    # 1️⃣ 总体分析
+    st.header("📊 总体分析")
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
+    with c2: st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
+    with c3: st.metric("🎯 机会", f"{avg_o:.1f}/5.0", f"{scores['O']}分")
+    with c4: st.metric("⚠️ 威胁", f"{avg_t:.1f}/5.0", f"{scores['T']}分")
 
-        # 2. 计算平均分
-        avg_s = scores["S"] / len([q for q in questions if q["type"] == "S"])
-        avg_w = scores["W"] / len([q for q in questions if q["type"] == "W"])
-        avg_o = scores["O"] / len([q for q in questions if q["type"] == "O"])
-        avg_t = scores["T"] / len([q for q in questions if q["type"] == "T"])
+    st.markdown("---")
+    if avg_s + avg_o > avg_w + avg_t:
+        st.success("### 🎉 积极前景")
+        st.write("你的外部机会与内部优势相结合，专升本成功几率较高！")
+    else:
+        st.warning("### ⚠️ 需要重点关注")
+        st.write("你面临一些挑战，但只要针对性改进，完全有机会实现逆袭！")
 
-        # 3. 提取高分项
-        def get_high_score_items(swot_type):
-            high = []
-            for idx, item in enumerate(details[swot_type]):
-                if item["score"] >= 4 and idx < len(swot_labels[swot_type]):
-                    high.append(swot_labels[swot_type][idx])
-            return high
+    # 2️⃣ SWOT 矩阵 + 雷达图
+    st.header("🎯 SWOT 矩阵")
+    swot_labels = {
+        'S': ["执行力", "组织力", "洞察力", "目标感", "进取心"],
+        'W': ["依赖性", "拖延倾向", "信息局限", "考试焦虑", "韧性不足", "决策困难"],
+        'O': ["支持系统", "榜样引导", "环境利好", "趋势匹配", "变革机会"],
+        'T': ["同伴压力", "环境干扰", "时机紧迫", "竞争激烈"]
+    }
 
-        high_S = get_high_score_items('S')
-        high_W = get_high_score_items('W')
-        high_O = get_high_score_items('O')
-        high_T = get_high_score_items('T')
+    def get_high(t):
+        return [swot_labels[t][i] for i, item in enumerate(details[t]) if item["score"] >= 4]
 
-        # 4. 颜色及图标配置
-        swot_style = {
-            'S': {'color': '#28a745', 'icon': '✅'},
-            'W': {'color': '#dc3545', 'icon': '⚠️'},
-            'O': {'color': '#17a2b8', 'icon': '🚀'},
-            'T': {'color': '#ffc107', 'icon': '⚡'}
-        }
+    high_S, high_W, high_O, high_T = get_high("S"), get_high("W"), get_high("O"), get_high("T")
 
-        # 5. 2×2 网格
-        col_left, col_right = st.columns(2)
-
-        # 通用渲染函数
-        def render_quadrant(col, label, title, avg_score, items):
-            """静态展示象限"""
-            color = swot_style[label]['color']
-            icon  = swot_style[label]['icon']
-
-            with col:
-                with st.container(border=True):
-                    st.markdown(
-                        f"### {icon} {title} ({label})  "
-                        f"<small style='color:{color};'>{avg_score:.1f}/5.0</small>",
-                        unsafe_allow_html=True
+    # 渲染象限
+    def render_quadrant(col, label, title, avg_score, items):
+        color = {"S": "#28a745", "W": "#dc3545", "O": "#17a2b8", "T": "#ffc107"}[label]
+        icon = {"S": "✅", "W": "⚠️", "O": "🚀", "T": "⚡"}[label]
+        with col:
+            with st.container(border=True):
+                st.markdown(f"### {icon} {title} ({label}) <small style='color:{color};'>{avg_score:.1f}/5.0</small>", unsafe_allow_html=True)
+                if items:
+                    tag_html = " ".join(
+                        f'<span style="background:{color};color:white;padding:4px 10px;border-radius:12px;margin:2px;display:inline-block;font-size:14px;">{t}</span>'
+                        for t in items
                     )
+                    st.markdown(tag_html, unsafe_allow_html=True)
+                else:
+                    no_hint = {"S": "暂无明显优势", "W": "暂无明显劣势", "O": "暂无明显机会", "T": "暂无明显威胁"}
+                    st.caption(no_hint[label])
 
-                    if items:
-                        # 一行行彩色标签
-                        tag_html = " ".join(
-                            f'<span style="background:{color};color:white;padding:4px 10px;border-radius:12px;'
-                            f'margin:2px;display:inline-block;font-size:14px;">{t}</span>'
-                            for t in items
-                        )
-                        st.markdown(tag_html, unsafe_allow_html=True)
-                    else:
-                        no_item_hint = {
-                            'S': '暂无明显优势',
-                            'W': '暂无明显劣势',
-                            'O': '暂无明显机会',
-                            'T': '暂无明显威胁'
-                        }
-                        st.caption(no_item_hint[label])
 
-        # 6. 渲染四个象限
-        with col_left:
-            render_quadrant(col_left, 'S', "优势", avg_s, high_S)
-            render_quadrant(col_left, 'O', "机会", avg_o, high_O)
+    # 雷达图 · 科幻霓虹 + 官方发光
+    r = [avg_s, avg_o, avg_w, avg_t]
+    theta = [" 优势(S)",  " 劣势(W)", " 威胁(T)"," 机会(O)"]  # 四角方位
 
-        with col_right:
-            render_quadrant(col_right, 'W', "劣势", avg_w, high_W)
-            render_quadrant(col_right, 'T', "威胁", avg_t, high_T)
-    
-    with tab3:
-        st.header("个性化建议")
+    fig = go.Figure(go.Scatterpolar(
+        r=r, theta=theta, mode='lines+markers+text',
+        marker=dict(size=12, color="#00f5ff", line=dict(width=2, color="#ffffff")),
+        line=dict(width=3, color="#00f5ff"),
+        fill='toself', fillcolor="rgba(0, 245, 255, 0.15)",
+        name="得分"
+    ))
+
+    # 四字发光大字体
+    big_label_font = dict(color="white", size=22, shadow="0 0 5px #00f5ff, 0 0 10px #00f5ff")
+    # 刻度数字原大
+    tick_font = dict(color="white", size=14)
+
+    fig.update_layout(
+        polar=dict(
+            bgcolor="rgba(0,0,0,0)",
+            radialaxis=dict(
+                range=[0, 5],
+                tickfont=tick_font,          # 刻度数字
+                gridcolor="rgba(0, 245, 255, 0.6)", gridwidth=1.5
+            ),
+            angularaxis=dict(
+                rotation=135,
+                direction="clockwise",
+                tickfont=big_label_font,     # 只放大「优势(S)」等四字
+                gridcolor="rgba(0, 245, 255, 0.6)", gridwidth=1.5
+            )
+        ),
+        margin=dict(l=40, r=40, t=40, b=40),
+        height=420,
+        template="plotly_dark",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white")
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    col_left, col_right = st.columns(2)
+    render_quadrant(col_left, 'S', "优势", avg_s, high_S)
+    render_quadrant(col_left, 'O', "机会", avg_o, high_O)
+    render_quadrant(col_right, 'W', "劣势", avg_w, high_W)
+    render_quadrant(col_right, 'T', "威胁", avg_t, high_T)
+
+    # 3️⃣ 个性建议 - 修改为更符合学生的版本
+    st.header("💡 学习策略建议")
+
+    # 根据得分情况给出不同的学习建议和课程推荐
+    if avg_s > 3.5 and avg_o > 3.5:
+        st.success("🌟 优势突破型学习策略")
+        st.write("""
+        **你的优势明显且机会良好，建议采取：**
+        - 发挥强项科目，建立信心优势
+        - 利用现有资源，快速提升成绩
+        - 设定较高目标，冲击重点院校
+        - 保持学习节奏，避免骄傲松懈
+        """)
         
-        # 基于分数的策略建议
-        st.subheader("🎯 总体备考策略")
+        # 课程推荐
+        st.info("**📚 新知教育课程推荐：全程班**")
+        st.write("""
+        适合基础扎实、升本目标明确的你！课程包含：
+        - 春秋季周末公共基础+重难强化
+        - 寒暑假专业课基础+强化集训
+        - 考前全科总复习
+        - OK网校全科配套网课
+        - 新知题库刷题训练
+        """)
         
-        if avg_s > 3.5 and avg_o > 3.5:
-            st.success("🚀 进攻型战略")
+    elif avg_s > 3.5 and avg_t > 3.5:
+        st.warning("🛡️ 稳扎稳打型学习策略")
+        st.write("""
+        **基础扎实但挑战较多，建议采取：**
+        - 巩固优势科目，确保基本盘稳定
+        - 重点突破薄弱环节，补齐短板
+        - 制定详细计划，按部就班执行
+        - 建立学习小组，互相督促进步
+        """)
+        
+        # 课程推荐
+        st.info("**📚 新知教育课程推荐：VIP班**")
+        st.write("""
+        适合需要系统化指导的你！课程包含：
+        - 春秋季周末公共基础+重难强化
+        - 寒暑假VIP公共+专业特训营
+        - VIP考前全科冲刺培训营
+        - VIP考前全科答疑特训
+        - OK网校全科配套网课
+        - 新知题库刷题训练
+        - **享受专属定向督学服务**
+        """)
+        
+    elif avg_w > 3.5 and avg_o > 3.5:
+        st.info("🚀 逆袭赶超型学习策略")
+        st.write("""
+        **机会很好但基础薄弱，建议采取：**
+        - 抓住关键机会，重点投入时间
+        - 寻求老师帮助，建立学习基础
+        - 从易到难循序渐进，建立信心
+        - 利用外部资源，弥补自身不足
+        """)
+        
+        # 课程推荐 - 同时推荐两个班次
+        st.info("**📚 新知教育课程推荐**")
+        
+        col_rec1, col_rec2 = st.columns(2)
+        
+        with col_rec1:
             st.markdown("""
-            **策略重点**: 充分发挥优势，大胆把握机会
-            
-            **具体行动**:
-            - 瞄准一流院校，设定较高目标
-            - 利用现有优势加速学习进度
-            - 积极抓住政策利好和外部机会
-            - 保持自信，但避免过度冒进
-            
-            **预期效果**: 成功率较高，有望进入理想院校
-            """)
-        elif avg_s > 3.5 and avg_t > 3.5:
-            st.warning("⚖️ 多元化战略")
-            st.markdown("""
-            **策略重点**: 利用优势应对威胁，分散风险
-            
-            **具体行动**:
-            - 准备2-3个备选院校方案
-            - 发挥长处规避外部威胁
-            - 建立风险应对机制
-            - 保持灵活调整的策略
-            
-            **预期效果**: 稳健备考，多重保障
-            """)
-        elif avg_w > 3.5 and avg_o > 3.5:
-            st.info("🔄 扭转型战略")
-            st.markdown("""
-            **策略重点**: 全力改进劣势，把握机会实现逆袭
-            
-            **具体行动**:
-            - 重点补足薄弱环节
-            - 寻求老师和同学的帮助
-            - 抓住外部机遇弥补不足
-            - 需要付出加倍努力
-            
-            **预期效果**: 通过努力可以实现较大提升
-            """)
-        else:
-            st.error("🛡️ 防御型战略")
-            st.markdown("""
-            **策略重点**: 稳扎稳打，克服劣势，规避威胁
-            
-            **具体行动**:
-            - 从基础知识开始扎实学习
-            - 优先确保基础题得分
-            - 逐步提升，不求快但求稳
-            - 建立良好的学习习惯
-            
-            **预期效果**: 稳步提升，先求稳再求进
+            **登科集训营（仅限大三学生）**
+            - 春秋季周末公共基础+重难强化
+            - 暑期VIP公共+专业特训营
+            - 大三登科特训营
+            - VIP考前全科答疑特训
+            - OK网校全科配套网课
+            - 新知题库刷题训练
             """)
         
-        # 具体行动建议
-        st.subheader("💡 具体行动建议")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
+        with col_rec2:
             st.markdown("""
-            **📅 立即行动清单**:
-            1. 制定详细的周学习计划
-            2. 整理专属学习空间
-            3. 关注目标院校招生信息
-            4. 加入学习小组互相监督
-            5. 建立每日学习习惯
+            **超能冲分班（适合各年级学生）**
+            - 春秋季周末公共基础+重难强化
+            - 暑期VIP公共+专业特训营
+            - 大三登科特训营
+            - 考前冲分急救营
+            - VIP考前全科答疑特训
+            - OK网校全科配套网课
+            - 新知题库刷题训练
             """)
         
-        with col2:
-            st.markdown("""
-            **🛠️ 实用工具推荐**:
-            - 番茄TODO - 时间管理
-            - Forest - 专注学习  
-            - Notion - 知识整理
-            - Xmind - 思维导图
-            - 百度网盘 - 资料存储
-            """)
+        st.write("""
+        **选择建议：**
+        - 如果您是**大三学生**，时间紧迫需要快速提升，推荐**登科集训营**
+        - 如果您希望系统打好基础，需要**沉浸式冲刺学习**，推荐**超能冲分班**
+        """)
         
-        # 鼓励话语
-        st.markdown("---")
-        if avg_s + avg_o > avg_w + avg_t:
-            st.success("🌈 你的基础很好，继续保持信心，坚持就是胜利！")
-        else:
-            st.info("🌟 每一个进步都值得庆祝，从现在开始行动，你一定能成功！")
-    
-    # 重新测试按钮
+    else:
+        st.error("💪 基础夯实型学习策略")
+        st.write("""
+        **当前挑战较多，建议采取：**
+        - 从头开始打好基础，不贪多求快
+        - 小步快跑，每天进步一点点
+        - 寻求专业辅导，建立正确方法
+        - 保持耐心毅力，相信厚积薄发
+        """)
+        
+        # 课程推荐
+        st.info("**📚 新知教育课程推荐：巅峰特训营**")
+        st.write("""
+        适合需要长期系统化提升的你！
+        课程包含：
+        - 春秋季周末公共基础+重难强化
+        - 寒暑假VIP公共+专业特训营
+        - 大三登科特训营
+        - VIP考前全科冲刺密训营
+        - VIP考前全科答疑特训
+        - OK网校全科配套网课
+        - 新知题库刷题训练
+        """)
+
+    # 具体学习建议
+    st.subheader("📚 针对性学习建议")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("""
+        **✅ 优势科目强化：**
+        - 每天保持2小时优势科目练习
+        - 整理错题本，避免重复错误
+        - 尝试教授他人，加深理解
+        
+        **❌ 薄弱环节改进：**
+        - 找出3个最薄弱知识点重点突破
+        - 寻求新知教育老师一对一指导
+        - 建立专项练习计划
+        """)
+
+    with col2:
+        st.markdown("""
+        **🎯 时间管理建议：**
+        - 制定周学习计划表
+        - 使用番茄工作法提高效率
+        - 早晚各1小时黄金学习时间
+        
+        **🤝 资源利用建议：**
+        - 加入新知教育专属学习小组，专业老师全程督学
+        - 利用小星学府线上题库和网课，随时随地查漏补缺
+        - 定期参加新知教育模拟考试，真实体验考场氛围
+        - 预约新知教育一对一辅导，针对性解决学习难题
+        """)
+
+    # 课程对比表
+    st.subheader("🏫 新知教育专升本课程体系")
+    st.markdown("""
+    | 班次 | 课程体系 | 适合学员 | 价格 |
+    |------|----------|----------|------|
+    | **全程班** | ①春秋季周末公共基础+重难强化 ②寒暑假专业课基础+强化集训 ③考前全科总复习 ④OK网校全科配套网课 ⑤新知题库刷题训练 | 基础扎实、升本目标明确、需要清晰备考方向指导的考生 | ¥2980 |
+    | **VIP班** | ①春秋季周末公共基础+重难强化 ②寒暑假VIP公共+专业特训营 ③VIP考前全科冲刺培训营 ④VIP考前全科答疑特训 ⑤OK网校全科配套网课 ⑥新知题库刷题训练 | 升本小白0基础、无明确备考方向，需掌握全科系统化指导教学，定向细致化管学的考生 | ¥7480 |
+    | **登科集训营**（仅限大三学生） | ①春秋季周末公共基础+重难强化 ②暑期VIP公共+专业特训营 ③大三登科特训营 ④VIP考前全科答疑特训 ⑤OK网校全科配套网课 ⑥新知题库刷题训练 | 升本小白0基础，考前佛脚党，需要全科系统化指导教学，定向细致化管学的考生 | ¥7480 |
+    | **超能冲分班** | ①春秋季周末公共基础+重难强化 ②暑期VIP公共+专业特训营 ③大三登科特训营 ④考前冲分急救营 ⑤VIP考前全科答疑特训 ⑥OK网校全科配套网课 ⑦新知题库刷题训练 | 升本小白0基础，考前佛脚党，需要全科系统化指导教学，定向细致化管学、冲刺急救，沉浸式学习氛围的考生 | 限时优惠¥9960 |
+    | **巅峰特训营** | ①春秋季周末公共基础+重难强化 ②寒暑假VIP公共+专业特训营 ③大三登科特训营 ④VIP考前全科冲刺培训营 ⑤VIP考前全科答疑特训 ⑥OK网校全科配套网课 ⑦新知题库刷题训练 | 学习基础薄弱，自律性不强，需要超长课时保障，定向细致化督学；大一至大三全程科学化、系统化、高效化多轮递进式全面提升的考生 | 限时优惠¥14460 |
+    """)
+
+    st.caption("*以上为各个班次大致课程体系内容，具体课程安排以辅导员课表通知为准")
+
+    # 鼓励话语
+    st.success("""
+    **💫 给亲爱的同学：**
+    专升本是一场马拉松，不是短跑。每天进步一点点，坚持下去，你一定能到达理想的彼岸！
+    新知教育陪你一起冲刺本科梦想！
+    """)
+
     st.markdown("---")
     if st.button("🔄 重新开始测试", use_container_width=True, type="primary"):
         st.session_state.current_question = 0
