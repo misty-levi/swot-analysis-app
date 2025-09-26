@@ -1,4 +1,9 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import time
 
 # 全局暗黑主题 + 字体 + 圆角
 st.set_page_config(
@@ -195,7 +200,7 @@ st.markdown(
     /* 课程卡片中加粗内容的颜色 - 修改为亮青色 */
     .stMarkdown strong {
         color: #00FFFF !important; /* 亮青色 */
-        text-shadow: 0 0 2px rgba(0, 255, 255, 0.5);
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
         font-weight: bold;
     }
 
@@ -211,6 +216,17 @@ st.markdown(
 
     .stMarkdown strong {
         animation: cyanGlow 2s ease-in-out infinite alternate;
+    }
+
+    /* 调整课程推荐标题的字体大小 - 与课程卡片标题保持一致 */
+    .course-recommendation-title {
+        font-size: 1.5rem !important;
+        font-weight: 700;
+        color: #00FFFF !important;
+        text-shadow: 0 0 5px #00FFFF;
+        margin: 1rem 0;
+        padding: 0.5rem 0;
+        border-bottom: 2px solid rgba(0, 255, 255, 0.3);
     }
 
     /* 移动端适配 - 新增媒体查询 */
@@ -281,25 +297,53 @@ st.markdown(
         .stAlert {
             font-size: 13px;
         }
+        
+        /* 移动端调整课程标题大小 */
+        .course-recommendation-title {
+            font-size: 1.3rem !important;
+        }
+        
+        /* 新增：调整课程卡片布局，让价格和课程名在同一行 */
+        .course-card-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        /* 调整课程名称在移动端的字体大小 */
+        .course-card-header h3 {
+            font-size: 1.2rem !important;
+            margin: 0 !important;
+            flex: 1;
+            margin-right: 1rem !important;
+        }
+        
+        /* 调整价格容器在移动端的大小 */
+        .course-price-mobile {
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        /* 调整价格字体大小 */
+        .course-price-mobile .price-main {
+            font-size: 18px !important;
+        }
+        
+        /* 调整价格说明字体大小 */
+        .course-price-mobile .price-note {
+            font-size: 10px !important;
+        }
+        
+        /* 确保在移动端价格容器不会换行 */
+        .course-card-header > div:last-child {
+            flex-shrink: 0;
+        }
     }
     </style>
     """,
     unsafe_allow_html=True,
-)
-
-
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import time
-
-# 设置页面配置
-st.set_page_config(
-    page_title="专升本学员SWOT智能分析系统",
-    page_icon="🎓",
-    layout="wide",
-    initial_sidebar_state="expanded"
 )
 
 # 定义测试题库（与之前相同）
@@ -503,8 +547,7 @@ def show_results_interface():
                     no_hint = {"S": "暂无明显优势", "W": "暂无明显劣势", "O": "暂无明显机会", "T": "暂无明显威胁"}
                     st.caption(no_hint[label])
 
-
-    # 雷达图 · 科幻霓虹 + 官方发光
+    # 雷达图 · 科幻霓虹 + 官方发光（修复不可拖动问题）
     r = [avg_s, avg_o, avg_w, avg_t]
     theta = [" 优势(S)",  " 劣势(W)", " 威胁(T)"," 机会(O)"]  # 四角方位
 
@@ -541,10 +584,27 @@ def show_results_interface():
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="white")
+        font=dict(color="white"),
+        # 添加以下配置禁用交互
+        dragmode=False,
+        hovermode=False
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    # 禁用缩放和旋转交互
+    fig.update_layout(
+        xaxis=dict(fixedrange=True),
+        yaxis=dict(fixedrange=True)
+    )
+
+    # 在显示图表时禁用交互模式
+    st.plotly_chart(fig, use_container_width=True, config={
+        'displayModeBar': False,  # 隐藏模式栏
+        'staticPlot': True,       # 静态图表
+        'scrollZoom': False,      # 禁用滚动缩放
+        'doubleClick': False,     # 禁用双击缩放
+        'showTips': False,        # 禁用提示
+        'displaylogo': False      # 隐藏logo
+    })
 
     col_left, col_right = st.columns(2)
     render_quadrant(col_left, 'S', "优势", avg_s, high_S)
@@ -566,8 +626,8 @@ def show_results_interface():
         - 保持学习节奏，避免骄傲松懈
         """)
         
-        # 课程推荐
-        st.info("**📚 新知教育课程推荐：全程班**")
+        # 课程推荐 - 使用适当大小的标题
+        st.markdown('<div class="course-recommendation-title">📚 新知教育课程推荐：全程班</div>', unsafe_allow_html=True)
         st.write("""
         适合基础扎实、升本目标明确的你！课程包含：
         - 春秋季周末公共基础+重难强化
@@ -587,8 +647,8 @@ def show_results_interface():
         - 建立学习小组，互相督促进步
         """)
         
-        # 课程推荐
-        st.info("**📚 新知教育课程推荐：VIP班**")
+        # 课程推荐 - 使用适当大小的标题
+        st.markdown('<div class="course-recommendation-title">📚 新知教育课程推荐：VIP班</div>', unsafe_allow_html=True)
         st.write("""
         适合需要系统化指导的你！课程包含：
         - 春秋季周末公共基础+重难强化
@@ -610,8 +670,8 @@ def show_results_interface():
         - 利用外部资源，弥补自身不足
         """)
         
-        # 课程推荐 - 同时推荐两个班次
-        st.info("**📚 新知教育课程推荐**")
+        # 课程推荐 - 使用适当大小的标题
+        st.markdown('<div class="course-recommendation-title">📚 新知教育课程推荐</div>', unsafe_allow_html=True)
         
         col_rec1, col_rec2 = st.columns(2)
         
@@ -654,8 +714,8 @@ def show_results_interface():
         - 保持耐心毅力，相信厚积薄发
         """)
         
-        # 课程推荐
-        st.info("**📚 新知教育课程推荐：巅峰特训营**")
+        # 课程推荐 - 使用适当大小的标题
+        st.markdown('<div class="course-recommendation-title">📚 新知教育课程推荐：巅峰特训营</div>', unsafe_allow_html=True)
         st.write("""
         适合需要长期系统化提升的你！
         课程包含：
@@ -682,7 +742,7 @@ def show_results_interface():
         
         **❌ 薄弱环节改进：**
         - 找出3个最薄弱知识点重点突破
-        - 寻求专业老师一对一指导
+        - 寻求新知教育老师一对一指导
         - 建立专项练习计划
         """)
 
@@ -690,15 +750,14 @@ def show_results_interface():
         st.markdown("""
         **🎯 时间管理建议：**
         - 制定周学习计划表
-        - 加入**新知专升本**打卡群
         - 使用番茄工作法提高效率
         - 早晚各1小时黄金学习时间
         
         **🤝 资源利用建议：**
-        - 加入**新知教育**专属定向督学活动，专业老师全程督学
-        - 利用**新知题库**刷题训练
-        - **OK网校**全科配套网课，随时随地查缺补漏
-        - **新知教育**考前全科答疑特训，针对性解决学习难题
+        - 加入**新知教育**专属学习小组，专业老师全程督学
+        - 利用**小星学府**线上题库和网课，随时随地查漏补缺
+        - 定期参加新知教育模拟考试，真实体验考场氛围
+        - 预约新知教育一对一辅导，针对性解决学习难题
         """)
 
     # 课程对比表 - 优化后的美观卡片布局
@@ -777,7 +836,7 @@ def show_results_interface():
             "name": "巅峰特训营",
             "icon": "🏆",
             "features": [
-                "春秋季周末公共基础+重学强化",
+                "春秋季周末公共基础+重难强化",
                 "**寒暑假VIP公共+专业特训营**",
                 "**大三登科特训营**",
                 "**VIP考前全科冲刺培训营**",
@@ -833,13 +892,13 @@ def show_results_interface():
             # 适合学员
             st.info(f"**适合学员:** {course['target']}")
             
-            # 课程内容 - 使用HTML直接渲染
+            # 课程内容 - 使用HTML直接渲染以确保橙色生效
             st.markdown("**课程内容:**")
             for feature in course['features']:
                 # 将Markdown加粗转换为HTML加粗并添加亮青色样式
                 html_feature = feature.replace("**", "<strong style='color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);'>").replace("**", "</strong>")
                 st.markdown(f"• {html_feature}", unsafe_allow_html=True)
-
+            
             # 卡片分隔线
             if i < len(courses) - 1:
                 st.markdown("---")
