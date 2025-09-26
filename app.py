@@ -1,9 +1,4 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import time
 
 # 全局暗黑主题 + 字体 + 圆角
 st.set_page_config(
@@ -303,48 +298,28 @@ st.markdown(
             font-size: 1.3rem !important;
         }
         
-        /* 新增：调整课程卡片布局，让价格和课程名在同一行 */
-        .course-card-header {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+        /* 新增：移动端调整课程卡片价格字体大小 */
+        .course-price {
+            font-size: 18px !important; /* 从原来的25px减小到18px */
         }
         
-        /* 调整课程名称在移动端的字体大小 */
-        .course-card-header h3 {
-            font-size: 1.2rem !important;
-            margin: 0 !important;
-            flex: 1;
-            margin-right: 1rem !important;
-        }
-        
-        /* 调整价格容器在移动端的大小 */
-        .course-price-mobile {
-            min-width: 100px;
-            text-align: center;
-        }
-        
-        /* 调整价格字体大小 */
-        .course-price-mobile .price-main {
-            font-size: 18px !important;
-        }
-        
-        /* 调整价格说明字体大小 */
-        .course-price-mobile .price-note {
-            font-size: 10px !important;
-        }
-        
-        /* 确保在移动端价格容器不会换行 */
-        .course-card-header > div:last-child {
-            flex-shrink: 0;
+        /* 确保价格容器在移动端有合适的间距 */
+        .course-price-container {
+            min-height: 70px !important; /* 稍微减小高度 */
+            padding: 6px 10px !important;
         }
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
+
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import time
 
 # 定义测试题库（与之前相同）
 questions = [
@@ -490,9 +465,6 @@ def show_test_interface():
         - 真实作答效果最佳
         - 完成后生成详细分析报告
         """)
-        
-        # 移除了"当前维度"的显示部分
-        # 只保留测试说明，不再显示当前问题的SWOT类型
 
 def show_results_interface():
     res = st.session_state.scorer.get_results()
@@ -547,7 +519,8 @@ def show_results_interface():
                     no_hint = {"S": "暂无明显优势", "W": "暂无明显劣势", "O": "暂无明显机会", "T": "暂无明显威胁"}
                     st.caption(no_hint[label])
 
-    # 雷达图 · 科幻霓虹 + 官方发光（修复不可拖动问题）
+
+    # 雷达图 · 科幻霓虹 + 官方发光
     r = [avg_s, avg_o, avg_w, avg_t]
     theta = [" 优势(S)",  " 劣势(W)", " 威胁(T)"," 机会(O)"]  # 四角方位
 
@@ -584,27 +557,10 @@ def show_results_interface():
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="white"),
-        # 添加以下配置禁用交互
-        dragmode=False,
-        hovermode=False
+        font=dict(color="white")
     )
 
-    # 禁用缩放和旋转交互
-    fig.update_layout(
-        xaxis=dict(fixedrange=True),
-        yaxis=dict(fixedrange=True)
-    )
-
-    # 在显示图表时禁用交互模式
-    st.plotly_chart(fig, use_container_width=True, config={
-        'displayModeBar': False,  # 隐藏模式栏
-        'staticPlot': True,       # 静态图表
-        'scrollZoom': False,      # 禁用滚动缩放
-        'doubleClick': False,     # 禁用双击缩放
-        'showTips': False,        # 禁用提示
-        'displaylogo': False      # 隐藏logo
-    })
+    st.plotly_chart(fig, use_container_width=True)
 
     col_left, col_right = st.columns(2)
     render_quadrant(col_left, 'S', "优势", avg_s, high_S)
@@ -871,7 +827,7 @@ def show_results_interface():
             
             with col2:
                 st.markdown(f"""
-                <div style="
+                <div class="course-price-container" style="
                     background: linear-gradient(90deg, {course['color']}, #ff00ff);
                     color: #0f0c29;
                     padding: 8px 12px;
@@ -884,7 +840,7 @@ def show_results_interface():
                     flex-direction: column;
                     justify-content: center;
                 ">
-                    <div style="font-size: 25px; margin-bottom: 4px;">{course['price']}</div>
+                    <div class="course-price" style="font-size: 25px; margin-bottom: 4px;">{course['price']}</div>
                     <div style="font-size: 12px; opacity: 0.7; line-height: 1.2;">{course['note']}</div>
                 </div>
                 """, unsafe_allow_html=True)
