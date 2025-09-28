@@ -308,6 +308,35 @@ st.markdown(
             min-height: 70px !important; /* 稍微减小高度 */
             padding: 6px 10px !important;
         }
+        
+        /* 新增：移动端调整鼓励话语换行 */
+        .stSuccess {
+            font-size: 14px !important;
+            line-height: 1.4 !important;
+            padding: 12px !important;
+            white-space: pre-line !important; /* 保留换行符 */
+        }
+        
+        /* 新增：移动端调整鼓励话语中的标题大小 */
+        .stSuccess strong {
+            font-size: 15px !important;
+            display: block;
+            margin-bottom: 8px;
+            white-space: normal !important;
+        }
+        
+        /* 新增：确保文本在移动端正确换行 */
+        .stSuccess .stMarkdown {
+            white-space: pre-line !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+        
+        /* 新增：移动端调整鼓励话语容器 */
+        div[data-testid="stSuccess"] > div {
+            white-space: pre-line !important;
+            word-break: break-word !important;
+        }
     }
     </style>
     """,
@@ -519,8 +548,7 @@ def show_results_interface():
                     no_hint = {"S": "暂无明显优势", "W": "暂无明显劣势", "O": "暂无明显机会", "T": "暂无明显威胁"}
                     st.caption(no_hint[label])
 
-
-    # 雷达图 · 科幻霓虹 + 官方发光
+    # 雷达图 · 科幻霓虹 + 官方发光（修复不可拖动问题）
     r = [avg_s, avg_o, avg_w, avg_t]
     theta = [" 优势(S)",  " 劣势(W)", " 威胁(T)"," 机会(O)"]  # 四角方位
 
@@ -557,10 +585,27 @@ def show_results_interface():
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="white")
+        font=dict(color="white"),
+        # 添加以下配置禁用交互
+        dragmode=False,
+        hovermode=False
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    # 禁用缩放和旋转交互
+    fig.update_layout(
+        xaxis=dict(fixedrange=True),
+        yaxis=dict(fixedrange=True)
+    )
+
+    # 在显示图表时禁用交互模式
+    st.plotly_chart(fig, use_container_width=True, config={
+        'displayModeBar': False,  # 隐藏模式栏
+        'staticPlot': True,       # 静态图表
+        'scrollZoom': False,      # 禁用滚动缩放
+        'doubleClick': False,     # 禁用双击缩放
+        'showTips': False,        # 禁用提示
+        'displaylogo': False      # 隐藏logo
+    })
 
     col_left, col_right = st.columns(2)
     render_quadrant(col_left, 'S', "优势", avg_s, high_S)
@@ -784,7 +829,9 @@ def show_results_interface():
                 "享受专属定向督学服务"
             ],
             "target": "升本小白0基础，考前佛脚党，需要全科系统化指导教学，定向细致化管学、冲刺急救，沉浸式学习氛围的考生",
-            "price": "限时优惠¥9960",
+            "original_price": "￥10860",
+            "discount_price": "¥9960",
+            "has_discount": True,
             "color": "#ffaa00",
             "note": "不含住宿费及额外600元综合服务费"
         },
@@ -802,7 +849,9 @@ def show_results_interface():
                 "享受全程专属定向督学服务"
             ],
             "target": "学习基础薄弱，自律性不强，需要超长课时保障，定向细致化督学；大一至大三全程科学化、系统化、高效化多轮递进式全面提升的考生",
-            "price": "限时优惠¥14460",
+            "original_price": "￥15960",
+            "discount_price": "¥14460",
+            "has_discount": True,
             "color": "#aa00ff",
             "note": "不含住宿费及额外800元综合服务费"
         }
@@ -826,24 +875,52 @@ def show_results_interface():
                 """, unsafe_allow_html=True)
             
             with col2:
-                st.markdown(f"""
-                <div class="course-price-container" style="
-                    background: linear-gradient(90deg, {course['color']}, #ff00ff);
-                    color: #0f0c29;
-                    padding: 8px 12px;
-                    border-radius: 20px;
-                    font-weight: bold;
-                    text-align: center;
-                    box-shadow: 0 0 10px {course['color']};
-                    min-height: 80px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                ">
-                    <div class="course-price" style="font-size: 25px; margin-bottom: 4px;">{course['price']}</div>
-                    <div style="font-size: 12px; opacity: 0.7; line-height: 1.2;">{course['note']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                if course.get('has_discount', False):
+                    # 有优惠价的显示方式 - 原价划掉，显示优惠价
+                    st.markdown(f"""
+                    <div class="course-price-container" style="
+                        background: linear-gradient(90deg, {course['color']}, #ff00ff);
+                        color: #0f0c29;
+                        padding: 8px 12px;
+                        border-radius: 20px;
+                        font-weight: bold;
+                        text-align: center;
+                        box-shadow: 0 0 10px {course['color']};
+                        min-height: 80px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    ">
+                        <div style="margin-bottom: 4px;">
+                            <del style="font-size: 16px; opacity: 0.7;">{course['original_price']}</del>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px;">
+                            <div class="course-price" style="font-size: 25px;">{course['discount_price']}</div>
+                            <div style="font-size: 16px; font-weight: bold; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.8);">限时优惠</div>
+                        </div>
+                        <div style="font-size: 12px; opacity: 0.7; line-height: 1.2;">{course['note']}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    # 普通价格的显示方式
+                    st.markdown(f"""
+                    <div class="course-price-container" style="
+                        background: linear-gradient(90deg, {course['color']}, #ff00ff);
+                        color: #0f0c29;
+                        padding: 8px 12px;
+                        border-radius: 20px;
+                        font-weight: bold;
+                        text-align: center;
+                        box-shadow: 0 0 10px {course['color']};
+                        min-height: 80px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    ">
+                        <div class="course-price" style="font-size: 25px; margin-bottom: 4px;">{course['price']}</div>
+                        <div style="font-size: 12px; opacity: 0.7; line-height: 1.2;">{course['note']}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
             
             # 适合学员
             st.info(f"**适合学员:** {course['target']}")
@@ -861,10 +938,14 @@ def show_results_interface():
 
     st.caption("*以上为各个班次大致课程体系内容，具体课程安排以辅导员课表通知为准")
 
-    # 鼓励话语
+    # 鼓励话语 - 优化移动端换行显示
     st.success("""
     **💫 给亲爱的同学：**
-    专升本是一场马拉松，不是短跑。每天进步一点点，坚持下去，你一定能到达理想的彼岸！
+    
+    专升本是一场马拉松，不是短跑。
+    每天进步一点点，坚持下去，
+    你一定能到达理想的彼岸！
+    
     新知教育陪你一起冲刺本科梦想！
     """)
 
