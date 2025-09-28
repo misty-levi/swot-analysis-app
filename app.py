@@ -1053,41 +1053,67 @@ def show_results_interface():
             """, unsafe_allow_html=True)
 
     # ------------------------------------------------------------------
-    # ❷ 平台特色（同样分段渲染，防崩）
+    # ❷ 平台特色（全宽 + 正常大小）
     # ------------------------------------------------------------------
     st.markdown("""
-    <div style="
+    <style>
+    .feature-box{
+        width:100%;
         background:linear-gradient(135deg,rgba(0,245,255,.1),rgba(255,0,255,.1));
         border-radius:16px;
         padding:2rem;
-        margin:2rem auto;
-        max-width:900px;
+        margin:2rem 0;
         border:1px solid rgba(0,245,255,.3);
         box-shadow:0 8px 32px rgba(0,245,255,.2);
-    ">
+    }
+    .feature-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+        gap:1.2rem;
+    }
+    .feature-item{
+        text-align:center;
+        padding:1rem;
+    }
+    .feature-icon{font-size:2rem;margin-bottom:.5rem}
+    .feature-title{
+        color:#00f5ff;
+        margin:.5rem 0;
+        font-size:1.1rem;
+        font-weight:bold;
+        text-shadow:0 0 8px currentColor;
+    }
+    .feature-desc{
+        margin:0;
+        color:#e0e0e0;
+        font-size:1rem;
+    }
+    </style>
+
+    <div class="feature-box">
         <h3 style="color:#00f5ff;text-align:center;margin-bottom:1.5rem;text-shadow:0 0 10px #00f5ff;">
             🌟 关注官方平台，获取专属福利
         </h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;">
-            <div style="text-align:center;padding:1rem">
-                <div style="font-size:2rem;color:#00f5ff;margin-bottom:.5rem">📚</div>
-                <h4 style="color:#00f5ff;margin:.5rem 0">最新政策解读</h4>
-                <p style="margin:0;color:#e0e0e0">第一时间获取专升本最新政策变化和解读</p>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <div class="feature-icon" style="color:#00f5ff">📚</div>
+                <div class="feature-title">最新政策解读</div>
+                <div class="feature-desc">第一时间获取专升本最新政策变化和解读</div>
             </div>
-            <div style="text-align:center;padding:1rem">
-                <div style="font-size:2rem;color:#ff00ff;margin-bottom:.5rem">💡</div>
-                <h4 style="color:#ff00ff;margin:.5rem 0">备考技巧分享</h4>
-                <p style="margin:0;color:#e0e0e0">专业老师分享高效学习方法和考试技巧</p>
+            <div class="feature-item">
+                <div class="feature-icon" style="color:#ff00ff">💡</div>
+                <div class="feature-title">备考技巧分享</div>
+                <div class="feature-desc">专业老师分享高效学习方法和考试技巧</div>
             </div>
-            <div style="text-align:center;padding:1rem">
-                <div style="font-size:2rem;color:#00ffaa;margin-bottom:.5rem">🎁</div>
-                <h4 style="color:#00ffaa;margin:.5rem 0">免费学习资料</h4>
-                <p style="margin:0;color:#e0e0e0">定期更新各科目免费题库、讲义和视频课程</p>
+            <div class="feature-item">
+                <div class="feature-icon" style="color:#00ffaa">🎁</div>
+                <div class="feature-title">免费学习资料</div>
+                <div class="feature-desc">定期更新各科目免费题库、讲义和视频课程</div>
             </div>
-            <div style="text-align:center;padding:1rem">
-                <div style="font-size:2rem;color:#ffaa00;margin-bottom:.5rem">👨‍🏫</div>
-                <h4 style="color:#ffaa00;margin:.5rem 0">专业老师答疑</h4>
-                <p style="margin:0;color:#e0e0e0">在线答疑解惑，解决学习中的各种难题</p>
+            <div class="feature-item">
+                <div class="feature-icon" style="color:#ffaa00">👨‍🏫</div>
+                <div class="feature-title">专业老师答疑</div>
+                <div class="feature-desc">在线答疑解惑，解决学习中的各种难题</div>
             </div>
         </div>
     </div>
