@@ -337,6 +337,39 @@ st.markdown(
             white-space: pre-line !important;
             word-break: break-word !important;
         }
+        
+        /* 新增：联系方式卡片在移动端调整为2列 */
+        .contact-card {
+            height: 160px !important;
+            padding: 1rem !important;
+        }
+        
+        /* 新增：平台特色介绍在移动端调整为1列 */
+        .platform-features {
+            grid-template-columns: 1fr !important;
+        }
+        
+        /* 新增：行动召唤部分在移动端调整内边距 */
+        .call-to-action {
+            padding: 1.5rem 1rem !important;
+        }
+        
+        /* 新增：调整图标大小 */
+        .contact-icon {
+            font-size: 2rem !important;
+        }
+    }
+    
+    /* 新增：联系方式卡片的动画效果 */
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+        0% { box-shadow: 0 0 15px #00f5ff; }
+        50% { box-shadow: 0 0 25px #00f5ff, 0 0 35px #ff00ff; }
+        100% { box-shadow: 0 0 15px #00f5ff; }
     }
     </style>
     """,
@@ -938,16 +971,127 @@ def show_results_interface():
 
     st.caption("*以上为各个班次大致课程体系内容，具体课程安排以辅导员课表通知为准")
 
-    # 鼓励话语 - 优化移动端换行显示
+    # 鼓励话语 - 优化移动端换行显示，并每段开头空两个字
     st.success("""
     **💫 给亲爱的同学：**
-               
+    
     　　专升本是一场马拉松，不是短跑。
     每天进步一点点，坚持下去，
     你一定能到达理想的彼岸！
-
+    
     　　新知教育陪你一起冲刺本科梦想！
     """)
+
+    # ------------------------------------------------------------------
+    # ❶ 联系方式卡片（真正居中 + 防崩）
+    # ------------------------------------------------------------------
+    st.markdown("---")
+    st.markdown(
+        '<div class="course-recommendation-title">📱 获取更多专升本资讯与学习资源</div>',
+        unsafe_allow_html=True,
+    )
+
+    # 1. 先写 CSS（一次即可）
+    st.markdown("""
+    <style>
+    .contact-container{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+        gap:1.2rem;
+        max-width:900px;
+        margin:0 auto;
+    }
+    .contact-card{
+        background:rgba(255,255,255,0.08);
+        border:1px solid rgba(0,245,255,0.3);
+        border-radius:16px;
+        padding:1.5rem 1rem;
+        text-align:center;
+        box-shadow:0 4px 20px rgba(0,245,255,0.2);
+        backdrop-filter:blur(8px);
+    }
+    .contact-icon{font-size:2.5rem;margin-bottom:.5rem}
+    .contact-plat{
+        color:#00f5ff;
+        margin:.5rem 0;
+        text-shadow:0 0 8px #00f5ff;
+        font-size:1.1rem;
+        font-weight:bold;
+    }
+    .contact-acct{
+        color:#0f0c29;
+        padding:.4rem .8rem;
+        border-radius:20px;
+        font-weight:bold;
+        margin-top:.5rem;
+        box-shadow:0 0 10px currentColor;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # 2. 再渲染卡片（一个平台一次 st.markdown）
+    platforms = [
+        {"ico": "📱", "plat": "微信公众号", "acct": "福建新知教育", "color": "#00f5ff"},
+        {"ico": "🎬", "plat": "微信视频号", "acct": "新知专升本", "color": "#ff00ff"},
+        {"ico": "📺", "plat": "B站官方账号", "acct": "新知专升本", "color": "#00ffaa"},
+        {"ico": "🎵", "plat": "抖音官方账号", "acct": "新知专升本", "color": "#ffaa00"},
+    ]
+
+    # 用 columns 仅做“横向排列”，不再塞长 HTML
+    cols = st.columns(4)
+    for col, p in zip(cols, platforms):
+        with col:
+            # 每次只渲染一张卡片，HTML 极短，不会被截断
+            st.markdown(f"""
+            <div class="contact-card">
+                <div class="contact-icon">{p['ico']}</div>
+                <div class="contact-plat">{p['plat']}</div>
+                <div class="contact-acct" style="background:linear-gradient(90deg,{p['color']},#ff00ff);">
+                    {p['acct']}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # ------------------------------------------------------------------
+    # ❷ 平台特色（同样分段渲染，防崩）
+    # ------------------------------------------------------------------
+    st.markdown("""
+    <div style="
+        background:linear-gradient(135deg,rgba(0,245,255,.1),rgba(255,0,255,.1));
+        border-radius:16px;
+        padding:2rem;
+        margin:2rem auto;
+        max-width:900px;
+        border:1px solid rgba(0,245,255,.3);
+        box-shadow:0 8px 32px rgba(0,245,255,.2);
+    ">
+        <h3 style="color:#00f5ff;text-align:center;margin-bottom:1.5rem;text-shadow:0 0 10px #00f5ff;">
+            🌟 关注官方平台，获取专属福利
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;">
+            <div style="text-align:center;padding:1rem">
+                <div style="font-size:2rem;color:#00f5ff;margin-bottom:.5rem">📚</div>
+                <h4 style="color:#00f5ff;margin:.5rem 0">最新政策解读</h4>
+                <p style="margin:0;color:#e0e0e0">第一时间获取专升本最新政策变化和解读</p>
+            </div>
+            <div style="text-align:center;padding:1rem">
+                <div style="font-size:2rem;color:#ff00ff;margin-bottom:.5rem">💡</div>
+                <h4 style="color:#ff00ff;margin:.5rem 0">备考技巧分享</h4>
+                <p style="margin:0;color:#e0e0e0">专业老师分享高效学习方法和考试技巧</p>
+            </div>
+            <div style="text-align:center;padding:1rem">
+                <div style="font-size:2rem;color:#00ffaa;margin-bottom:.5rem">🎁</div>
+                <h4 style="color:#00ffaa;margin:.5rem 0">免费学习资料</h4>
+                <p style="margin:0;color:#e0e0e0">定期更新各科目免费题库、讲义和视频课程</p>
+            </div>
+            <div style="text-align:center;padding:1rem">
+                <div style="font-size:2rem;color:#ffaa00;margin-bottom:.5rem">👨‍🏫</div>
+                <h4 style="color:#ffaa00;margin:.5rem 0">专业老师答疑</h4>
+                <p style="margin:0;color:#e0e0e0">在线答疑解惑，解决学习中的各种难题</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("---")
     if st.button("🔄 重新开始测试", use_container_width=True, type="primary"):
