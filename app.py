@@ -393,19 +393,6 @@ st.markdown(
         .contact-icon {
             font-size: 2rem !important;
         }
-        
-        /* 新增：移动端总体分析指标改为2×2布局 */
-        div[data-testid="stHorizontalBlock"] {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 0.5rem !important;
-        }
-        
-        /* 确保每个指标容器在移动端有合适的内边距 */
-        div[data-testid="metric-container"] {
-            padding: 0.8rem !important;
-            margin-bottom: 0.5rem !important;
-        }
     }
 
     
