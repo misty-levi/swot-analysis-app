@@ -232,33 +232,26 @@ st.markdown(
         padding: 0.5rem 0;
     }
 
-    /* 修复展开内容区域的背景色 */
-    .streamlit-expanderContent {
-        background: rgba(0, 0, 0, 0.3) !important;
-        color: #e0e0e0 !important;
-        border-radius: 8px;
-        margin-top: 0.5rem;
-        padding: 1rem;
-        border: 1px solid rgba(0, 245, 255, 0.2);
-    }
-
-    /* 展开器标题样式 */
-    .streamlit-expanderHeader {
-        color: #00f5ff !important;
-        font-weight: bold;
-    }
-
-    /* 确保展开内容中的文字颜色 */
-    .streamlit-expanderContent p,
-    .streamlit-expanderContent div,
-    .streamlit-expanderContent span {
+    /* 🚀 强力修复：展开器白底问题终极方案 */
+    section[data-testid="stExpander"] > div > div,
+    section[data-testid="stExpander"] > div > div > div,
+    div[data-testid="stExpander"] > div > div,
+    div[data-testid="stExpander"] > div > div > div {
+        background: rgba(0, 0, 0, 0.8) !important;
         color: #e0e0e0 !important;
     }
 
-    /* 确保展开内容中的加粗文字颜色 */
-    .streamlit-expanderContent strong {
+    /* 确保所有嵌套元素都继承正确的颜色 */
+    section[data-testid="stExpander"] *,
+    div[data-testid="stExpander"] * {
+        color: #e0e0e0 !important;
+        background-color: transparent !important;
+    }
+
+    /* 特别处理加粗文本 */
+    section[data-testid="stExpander"] strong,
+    div[data-testid="stExpander"] strong {
         color: #00FFFF !important;
-        text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
     }
 
     /* 移动端适配 - 新增媒体查询 */
@@ -399,6 +392,40 @@ st.markdown(
         /* 新增：调整图标大小 */
         .contact-icon {
             font-size: 2rem !important;
+        }
+            
+        /* 新增：移动端总体分析指标改为2×2布局 */
+        div[data-testid="stHorizontalBlock"] {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 0.5rem !important;
+        }
+        
+        /* 确保每个指标容器在移动端有合适的内边距 */
+        div[data-testid="metric-container"] {
+            padding: 0.8rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        /* 移动端调整指标标签大小 */
+        [data-testid="stMetricLabel"] {
+            font-size: 1.1rem !important;
+            margin-bottom: 0.3rem !important;
+        }
+        
+        /* 移动端调整指标值大小 */
+        [data-testid="stMetricValue"] {
+            font-size: 18px !important;
+        }
+        
+        /* 移动端调整指标变化文字大小 */
+        [data-testid="stMetricDelta"] {
+            font-size: 12px !important;
+        }
+        
+        /* 确保指标容器在移动端有合适的高度 */
+        div[data-testid="metric-container"] > div {
+            min-height: 80px !important;
         }
     }
     
