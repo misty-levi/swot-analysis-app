@@ -393,40 +393,6 @@ st.markdown(
         .contact-icon {
             font-size: 2rem !important;
         }
-            
-        /* 新增：移动端总体分析指标改为2×2布局 */
-        div[data-testid="stHorizontalBlock"] {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 0.5rem !important;
-        }
-        
-        /* 确保每个指标容器在移动端有合适的内边距 */
-        div[data-testid="metric-container"] {
-            padding: 0.8rem !important;
-            margin-bottom: 0.5rem !important;
-        }
-        
-        /* 移动端调整指标标签大小 */
-        [data-testid="stMetricLabel"] {
-            font-size: 1.1rem !important;
-            margin-bottom: 0.3rem !important;
-        }
-        
-        /* 移动端调整指标值大小 */
-        [data-testid="stMetricValue"] {
-            font-size: 18px !important;
-        }
-        
-        /* 移动端调整指标变化文字大小 */
-        [data-testid="stMetricDelta"] {
-            font-size: 12px !important;
-        }
-        
-        /* 确保指标容器在移动端有合适的高度 */
-        div[data-testid="metric-container"] > div {
-            min-height: 80px !important;
-        }
     }
     
     /* 新增：联系方式卡片的动画效果 */
