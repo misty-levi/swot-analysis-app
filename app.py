@@ -224,6 +224,14 @@ st.markdown(
         border-bottom: 2px solid rgba(0, 255, 255, 0.3);
     }
 
+    /* 学习策略标题样式 */
+    .strategy-title {
+        font-size: 1.5rem !important;
+        font-weight: 700;
+        margin: 1rem 0;
+        padding: 0.5rem 0;
+    }
+
     /* 移动端适配 - 新增媒体查询 */
     @media screen and (max-width: 768px) {
         /* 调整全局字体大小 */
@@ -298,6 +306,11 @@ st.markdown(
             font-size: 1.3rem !important;
         }
         
+        /* 移动端调整学习策略标题大小 */
+        .strategy-title {
+            font-size: 1.3rem !important;
+        }
+        
         /* 新增：移动端调整课程卡片价格字体大小 */
         .course-price {
             font-size: 18px !important; /* 从原来的25px减小到18px */
@@ -325,7 +338,7 @@ st.markdown(
             white-space: normal !important;
         }
         
-        /* 新增：确保文本在移动端正确换行 */
+        /* 确保文本在移动端正确换行 */
         .stSuccess .stMarkdown {
             white-space: pre-line !important;
             word-wrap: break-word !important;
@@ -544,19 +557,19 @@ def show_results_interface():
 
     st.markdown("---")
     if avg_s + avg_o > avg_w + avg_t:
-        st.success("### 🎉 积极前景")
-        st.write("你的外部机会与内部优势相结合，专升本成功几率较高！")
+        st.success("### 🎉 上岸潜力股！")
+        st.write("你现在的状态≈\"基础不错 + 机会在线\"，只要跟住新知的节奏，保持刷题量，稳住优势科目，本科录取通知书正在向你招手！")
     else:
-        st.warning("### ⚠️ 需要重点关注")
-        st.write("你面临一些挑战，但只要针对性改进，完全有机会实现逆袭！")
+        st.warning("### 💪 逆袭预备役！")
+        st.write("基础暂时落后？ 没关系！新知对升本小白0基础有妙招：阶段测→补弱项→狂刷题→押题卷，4步带你弯道超车！现在出发，完全来得及！")
 
     # 2️⃣ SWOT 矩阵 + 雷达图
     st.header("🎯 SWOT 矩阵")
     swot_labels = {
-        'S': ["执行力", "组织力", "洞察力", "目标感", "进取心"],
-        'W': ["依赖性", "拖延倾向", "信息局限", "考试焦虑", "韧性不足", "决策困难"],
-        'O': ["支持系统", "榜样引导", "环境利好", "趋势匹配", "变革机会"],
-        'T': ["同伴压力", "环境干扰", "时机紧迫", "竞争激烈"]
+        'S': ["长期自律", "秩序敏感", "洞察力强", "	生涯笃定", "进取心高"],
+        'W': ["外部归因", "时间错觉", "信源单一", "评价焦虑", "韧性不足", "决策困难"],
+        'O': ["社会资本", "榜样引导", "窗口红利", "需求共振", "变革机会"],
+        'T': ["同学内卷", "环境干扰", "时机紧迫", "竞争激烈"]
     }
 
     def get_high(t):
@@ -564,16 +577,54 @@ def show_results_interface():
 
     high_S, high_W, high_O, high_T = get_high("S"), get_high("W"), get_high("O"), get_high("T")
 
-    # 渲染象限
+    # ========================  仅新增  ========================
+    # 与 swot_labels 一一对应的「秒懂」提示
+    tooltip = {
+        'S': [
+            "能把计划变成日常习惯",
+            "对混乱低容忍，自动整理",
+            "用信息差抢跑政策/考纲",
+            "已锁定本科路径，不摇摆",
+            "越难题越兴奋，自驱刷高阶"
+        ],
+        'W': [
+            "先找答案而非自己啃",
+            "总觉“再给我一周就能满分”",
+            "只刷抖音，不看官网",
+            "一考试就慌，心率爆表",
+            "三连错后直接放弃",
+            "选专业/院校纠结到失眠"
+        ],
+        'O': [
+            "家族/学长/老师可拉一把",
+            "复制学长三个月逆袭路线",
+            "扩招/新专业/政策刚放开",
+            "你学的正是本科院校急缺的",
+            "新考纲=重新洗牌，上车"
+        ],
+        'T': [
+            "图书馆 6 点没座",
+            "实习+家务+备考三线并行",
+            "公办名额=秒光",
+            "多一人上岸就少一个坑"
+        ]
+    }
+    # =========================================================
+
+
     def render_quadrant(col, label, title, avg_score, items):
         color = {"S": "#28a745", "W": "#dc3545", "O": "#17a2b8", "T": "#ffc107"}[label]
         icon = {"S": "✅", "W": "⚠️", "O": "🚀", "T": "⚡"}[label]
         with col:
             with st.container(border=True):
-                st.markdown(f"### {icon} {title} ({label}) <small style='color:{color};'>{avg_score:.1f}/5.0</small>", unsafe_allow_html=True)
+                st.markdown(f"### {icon} {title} ({label}) <small style='color:{color};'>{avg_score:.1f}/5.0</small>",
+                            unsafe_allow_html=True)
                 if items:
+                    # 用 title 属性实现悬停提示
                     tag_html = " ".join(
-                        f'<span style="background:{color};color:white;padding:4px 10px;border-radius:12px;margin:2px;display:inline-block;font-size:14px;">{t}</span>'
+                        f'<span title="{tooltip[label][swot_labels[label].index(t)]}" '
+                        f'style="background:{color};color:white;padding:4px 10px;border-radius:12px;margin:2px;'
+                        f'display:inline-block;font-size:14px;cursor:help;">{t}</span>'
                         for t in items
                     )
                     st.markdown(tag_html, unsafe_allow_html=True)
@@ -582,7 +633,7 @@ def show_results_interface():
                     st.caption(no_hint[label])
 
     # 雷达图 · 科幻霓虹 + 官方发光（修复不可拖动问题）
-    r = [avg_s, avg_o, avg_w, avg_t]
+    r = [avg_s, avg_w, avg_t, avg_o]
     theta = [" 优势(S)",  " 劣势(W)", " 威胁(T)"," 机会(O)"]  # 四角方位
 
     fig = go.Figure(go.Scatterpolar(
@@ -651,8 +702,9 @@ def show_results_interface():
 
     # 根据得分情况给出不同的学习建议和课程推荐
     if avg_s > 3.5 and avg_o > 3.5:
-        st.success("🌟 优势突破型学习策略")
-        st.write("""
+        # 使用HTML直接设置标题样式
+        st.markdown('<div class="strategy-title" style="color: #28a745; text-shadow: 0 0 5px #28a745;">🌟 优势突破型学习策略</div>', unsafe_allow_html=True)
+        st.success("""
         **你的优势明显且机会良好，建议采取：**
         - 发挥强项科目，建立信心优势
         - 利用现有资源，快速提升成绩
@@ -664,7 +716,7 @@ def show_results_interface():
         st.markdown('<div class="course-recommendation-title">📚 新知教育课程推荐：全程班</div>', unsafe_allow_html=True)
         st.write("""
         适合基础扎实、升本目标明确的你！课程包含：
-        - 春秋季周末公共基础+重难强化
+        - 春秋季周末公共基础+重学强化
         - 寒暑假专业课基础+强化集训
         - 考前全科总复习
         - OK网校全科配套网课
@@ -672,8 +724,8 @@ def show_results_interface():
         """)
         
     elif avg_s > 3.5 and avg_t > 3.5:
-        st.warning("🛡️ 稳扎稳打型学习策略")
-        st.write("""
+        st.markdown('<div class="strategy-title" style="color: #ffc107; text-shadow: 0 0 5px #ffc107;">🛡️ 稳扎稳打型学习策略</div>', unsafe_allow_html=True)
+        st.warning("""
         **基础扎实但挑战较多，建议采取：**
         - 巩固优势科目，确保基本盘稳定
         - 重点突破薄弱环节，补齐短板
@@ -685,7 +737,7 @@ def show_results_interface():
         st.markdown('<div class="course-recommendation-title">📚 新知教育课程推荐：VIP班</div>', unsafe_allow_html=True)
         st.write("""
         适合需要系统化指导的你！课程包含：
-        - 春秋季周末公共基础+重难强化
+        - 春秋季周末公共基础+重学强化
         - 寒暑假VIP公共+专业特训营
         - **VIP考前全科冲刺培训营**
         - **VIP考前全科答疑特训**
@@ -695,8 +747,8 @@ def show_results_interface():
         """)
         
     elif avg_w > 3.5 and avg_o > 3.5:
-        st.info("🚀 逆袭赶超型学习策略")
-        st.write("""
+        st.markdown('<div class="strategy-title" style="color: #17a2b8; text-shadow: 0 0 5px #17a2b8;">🚀 逆袭赶超型学习策略</div>', unsafe_allow_html=True)
+        st.info("""
         **机会很好但基础薄弱，建议采取：**
         - 抓住关键机会，重点投入时间
         - 寻求老师帮助，建立学习基础
@@ -723,7 +775,7 @@ def show_results_interface():
         with col_rec2:
             st.markdown("""
             **超能冲分班（适合各年级学生）**
-            - 春秋季周末公共基础+重难强化
+            - 春秋季周末公共基础+重学强化
             - **暑期VIP公共+专业特训营**
             - **大三登科特训营**
             - **考前冲分急救营**
@@ -739,8 +791,8 @@ def show_results_interface():
         """)
         
     else:
-        st.error("💪 基础夯实型学习策略")
-        st.write("""
+        st.markdown('<div class="strategy-title" style="color: #dc3545; text-shadow: 0 0 5px #dc3545;">💪 基础夯实型学习策略</div>', unsafe_allow_html=True)
+        st.error("""
         **当前挑战较多，建议采取：**
         - 从头开始打好基础，不贪多求快
         - 小步快跑，每天进步一点点
@@ -753,7 +805,7 @@ def show_results_interface():
         st.write("""
         适合需要长期系统化提升的你！
         课程包含：
-        - 春秋季周末公共基础+重难强化
+        - 春秋季周末公共基础+重学强化
         - **寒暑假VIP公共+专业特训营**
         - **大三登科特训营**
         - **VIP考前全科冲刺密训营**
@@ -776,7 +828,7 @@ def show_results_interface():
         
         **❌ 薄弱环节改进：**
         - 找出3个最薄弱知识点重点突破
-        - 寻求新知教育老师一对一指导
+        - 寻求专业老师一对一指导
         - 建立专项练习计划
         """)
 
@@ -784,14 +836,15 @@ def show_results_interface():
         st.markdown("""
         **🎯 时间管理建议：**
         - 制定周学习计划表
+        - 加入新知教育专属督学群共同进步
         - 使用番茄工作法提高效率
         - 早晚各1小时黄金学习时间
         
         **🤝 资源利用建议：**
-        - 加入**新知教育**专属学习小组，专业老师全程督学
-        - 利用**小星学府**线上题库和网课，随时随地查漏补缺
-        - 定期参加新知教育模拟考试，真实体验考场氛围
-        - 预约新知教育一对一辅导，针对性解决学习难题
+        - 加入**新知教育**专属定向督学服务计划，专业老师全程督学
+        - 利用**OK网校**全科配套网课，知识点随时回顾
+        - **新知题库**刷题训练，随时随地查漏补缺
+        - **新知教育**考前全科答疑，针对性解决学习难题
         """)
 
     # 课程对比表 - 优化后的美观卡片布局
@@ -803,7 +856,7 @@ def show_results_interface():
             "name": "全程班",
             "icon": "🎯",
             "features": [
-                "春秋季周末公共基础+重难强化",
+                "春秋季周末公共基础+重学强化",
                 "寒暑假专业课基础+强化集训", 
                 "考前全科总复习",
                 "OK网校全科配套网课",
@@ -818,7 +871,7 @@ def show_results_interface():
             "name": "VIP班",
             "icon": "⭐",
             "features": [
-                "春秋季周末公共基础+重难强化",
+                "春秋季周末公共基础+重学强化",
                 "寒暑假VIP公共+专业特训营",
                 "**VIP考前全科冲刺培训营**",
                 "**VIP考前全科答疑特训**",
@@ -835,7 +888,7 @@ def show_results_interface():
             "name": "登科集训营（仅限大三学生）",
             "icon": "🚀",
             "features": [
-                "春秋季周末公共基础+重难强化",
+                "春秋季周末公共基础+重学强化",
                 "**暑期VIP公共+专业特训营**",
                 "**大三登科特训营**",
                 "VIP考前全科答疑特训",
@@ -872,7 +925,7 @@ def show_results_interface():
             "name": "巅峰特训营",
             "icon": "🏆",
             "features": [
-                "春秋季周末公共基础+重难强化",
+                "春秋季周末公共基础+重学强化",
                 "**寒暑假VIP公共+专业特训营**",
                 "**大三登科特训营**",
                 "**VIP考前全科冲刺培训营**",
@@ -1037,7 +1090,7 @@ def show_results_interface():
         {"ico": "🎵", "plat": "抖音官方账号", "acct": "新知专升本", "color": "#ffaa00"},
     ]
 
-    # 用 columns 仅做“横向排列”，不再塞长 HTML
+    # 用 columns 仅做"横向排列"，不再塞长 HTML
     cols = st.columns(4)
     for col, p in zip(cols, platforms):
         with col:
@@ -1108,12 +1161,12 @@ def show_results_interface():
             <div class="feature-item">
                 <div class="feature-icon" style="color:#00ffaa">🎁</div>
                 <div class="feature-title">免费学习资料</div>
-                <div class="feature-desc">定期更新各科目免费题库、讲义和视频课程</div>
+                <div class="feature-desc">定期更新各科目免费题库、素材和视频课程</div>
             </div>
             <div class="feature-item">
                 <div class="feature-icon" style="color:#ffaa00">👨‍🏫</div>
-                <div class="feature-title">专业老师答疑</div>
-                <div class="feature-desc">在线答疑解惑，解决学习中的各种难题</div>
+                <div class="feature-title">招生开课提醒</div>
+                <div class="feature-desc">第一时间收到新开班、限时优惠等信息</div>
             </div>
         </div>
     </div>
