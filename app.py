@@ -395,13 +395,13 @@ st.markdown(
         }
         
         /* === 总体分析 手机 2×2 网格 === */
-        .stHorizontalBlock:has(> div > div > div > [data-testid="metric-container"]:nth-child(4)) {
+         div[data-testid="stHorizontalBlock"] {
             display: grid !important;
             grid-template-columns: 1fr 1fr !important;
             gap: 0.6rem !important;
         }
         /* 让每个指标卡片撑满格子 */
-        .stHorizontalBlock > div {
+        div[data-testid="stHorizontalBlock"] > div {
             width: 100% !important;
         }
     }
