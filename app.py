@@ -393,6 +393,17 @@ st.markdown(
         .contact-icon {
             font-size: 2rem !important;
         }
+        
+        /* === 总体分析 手机 2×2 网格 === */
+        .stHorizontalBlock:has(> div > div > [data-testid="metric-container"]:nth-child(4)) {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;   /* 2 列 */
+            gap: 0.6rem !important;
+        }
+        /* 让每个指标卡片撑满格子 */
+        .stHorizontalBlock > div {
+            width: 100% !important;
+        }
     }
 
     
@@ -572,19 +583,11 @@ def show_results_interface():
 
     # 1️⃣ 总体分析
     st.header("📊 总体分析")
-
-    # 响应式：手机 2 列 / 桌面 4 列
-    cols = st.columns(2)                      # 第一行
-    with cols[0]:
-        st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
-    with cols[1]:
-        st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
-
-    cols = st.columns(2)                      # 第二行
-    with cols[0]:
-        st.metric("🎯 机会", f"{avg_o:.1f}/5.0", f"{scores['O']}分")
-    with cols[1]:
-        st.metric("⚠️ 威胁", f"{avg_t:.1f}/5.0", f"{scores['T']}分")
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
+    with c2: st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
+    with c3: st.metric("🎯 机会", f"{avg_o:.1f}/5.0", f"{scores['O']}分")
+    with c4: st.metric("⚠️ 威胁", f"{avg_t:.1f}/5.0", f"{scores['T']}分")
 
     st.markdown("---")
     if avg_s + avg_o > avg_w + avg_t:
