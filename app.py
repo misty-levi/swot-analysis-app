@@ -569,14 +569,29 @@ def show_results_interface():
     avg = lambda t: scores[t] / len([q for q in questions if q["type"] == t])
     avg_s, avg_w, avg_o, avg_t = avg("S"), avg("W"), avg("O"), avg("T")
 
-    # 1️⃣ 总体分析
+    # 1️⃣ 总体分析 - 修改为2x2网格布局
     st.header("📊 总体分析")
-    st.markdown('<div id="swot-metrics-row"></div>', unsafe_allow_html=True)   # ← 打标记
-    c1, c2, c3, c4 = st.columns(4)
-    with c1: st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
-    with c2: st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
-    with c3: st.metric("🎯 机会", f"{avg_o:.1f}/5.0", f"{scores['O']}分")
-    with c4: st.metric("⚠️ 威胁", f"{avg_t:.1f}/5.0", f"{scores['T']}分")
+    
+    # 创建2x2网格布局
+    col_top, col_bottom = st.columns(2)
+    
+    with col_top:
+        # 第一行：优势和劣势
+        col_s, col_w = st.columns(2)
+        with col_s:
+            st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
+        with col_w:
+            st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
+    
+    with col_bottom:
+        # 第二行：机会和威胁
+        col_o, col_t = st.columns(2)
+        with col_o:
+            st.metric("🎯 机会", f"{avg_o:.1f}/5.0", f"{scores['O']}分")
+        with col_t:
+            st.metric("⚠️ 威胁", f"{avg_t:.1f}/5.0", f"{scores['T']}分")
+
+    st.markdown("---")
 
     st.markdown("---")
     if avg_s + avg_o > avg_w + avg_t:
