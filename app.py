@@ -232,6 +232,35 @@ st.markdown(
         padding: 0.5rem 0;
     }
 
+    /* 修复展开内容区域的背景色 */
+    .streamlit-expanderContent {
+        background: rgba(0, 0, 0, 0.3) !important;
+        color: #e0e0e0 !important;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        padding: 1rem;
+        border: 1px solid rgba(0, 245, 255, 0.2);
+    }
+
+    /* 展开器标题样式 */
+    .streamlit-expanderHeader {
+        color: #00f5ff !important;
+        font-weight: bold;
+    }
+
+    /* 确保展开内容中的文字颜色 */
+    .streamlit-expanderContent p,
+    .streamlit-expanderContent div,
+    .streamlit-expanderContent span {
+        color: #e0e0e0 !important;
+    }
+
+    /* 确保展开内容中的加粗文字颜色 */
+    .streamlit-expanderContent strong {
+        color: #00FFFF !important;
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
+    }
+
     /* 移动端适配 - 新增媒体查询 */
     @media screen and (max-width: 768px) {
         /* 调整全局字体大小 */
@@ -566,7 +595,7 @@ def show_results_interface():
     # 2️⃣ SWOT 矩阵 + 雷达图
     st.header("🎯 SWOT 矩阵")
     swot_labels = {
-        'S': ["长期自律", "秩序敏感", "洞察力强", "	生涯笃定", "进取心高"],
+        'S': ["长期自律", "秩序敏感", "洞察力强", "生涯笃定", "进取心高"],
         'W': ["外部归因", "时间错觉", "信源单一", "评价焦虑", "韧性不足", "决策困难"],
         'O': ["社会资本", "榜样引导", "窗口红利", "需求共振", "变革机会"],
         'T': ["同学内卷", "环境干扰", "时机紧迫", "竞争激烈"]
@@ -577,7 +606,6 @@ def show_results_interface():
 
     high_S, high_W, high_O, high_T = get_high("S"), get_high("W"), get_high("O"), get_high("T")
 
-    # ========================  仅新增  ========================
     # 与 swot_labels 一一对应的「秒懂」提示
     tooltip = {
         'S': [
@@ -589,7 +617,7 @@ def show_results_interface():
         ],
         'W': [
             "先找答案而非自己啃",
-            "总觉“再给我一周就能满分”",
+            "总觉\"再给我一周就能满分\"",
             "只刷抖音，不看官网",
             "一考试就慌，心率爆表",
             "三连错后直接放弃",
@@ -609,8 +637,6 @@ def show_results_interface():
             "多一人上岸就少一个坑"
         ]
     }
-    # =========================================================
-
 
     def render_quadrant(col, label, title, avg_score, items):
         color = {"S": "#28a745", "W": "#dc3545", "O": "#17a2b8", "T": "#ffc107"}[label]
@@ -620,14 +646,18 @@ def show_results_interface():
                 st.markdown(f"### {icon} {title} ({label}) <small style='color:{color};'>{avg_score:.1f}/5.0</small>",
                             unsafe_allow_html=True)
                 if items:
-                    # 用 title 属性实现悬停提示
+                    # 1) 先展示彩色标签
                     tag_html = " ".join(
-                        f'<span title="{tooltip[label][swot_labels[label].index(t)]}" '
-                        f'style="background:{color};color:white;padding:4px 10px;border-radius:12px;margin:2px;'
-                        f'display:inline-block;font-size:14px;cursor:help;">{t}</span>'
+                        f'<span style="background:{color};color:white;padding:4px 10px;border-radius:12px;margin:2px;display:inline-block;font-size:14px;">{t}</span>'
                         for t in items
                     )
                     st.markdown(tag_html, unsafe_allow_html=True)
+
+                    # 2) 点击展开「秒懂」
+                    with st.expander("💡 点击查看详细解读"):
+                        for t in items:
+                            idx = swot_labels[label].index(t)
+                            st.write(f"**{t}**：{tooltip[label][idx]}")
                 else:
                     no_hint = {"S": "暂无明显优势", "W": "暂无明显劣势", "O": "暂无明显机会", "T": "暂无明显威胁"}
                     st.caption(no_hint[label])
