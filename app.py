@@ -395,6 +395,17 @@ st.markdown(
         }
     }
 
+    @media screen and (max-width: 768px) {
+        /* 利用我们打的空标记 <div id="swot-metrics-row"></div> */
+        #swot-metrics-row + div[data-testid="stHorizontalBlock"] {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 0.6rem !important;
+        }
+        #swot-metrics-row + div[data-testid="stHorizontalBlock"] > div {
+            width: 100% !important;
+        }
+    }
     
     /* 新增：联系方式卡片的动画效果 */
     @keyframes rotate {
@@ -572,6 +583,7 @@ def show_results_interface():
 
     # 1️⃣ 总体分析
     st.header("📊 总体分析")
+    st.markdown('<div id="swot-metrics-row"></div>', unsafe_allow_html=True)   # ← 打标记
     c1, c2, c3, c4 = st.columns(4)
     with c1: st.metric("✅ 优势", f"{avg_s:.1f}/5.0", f"{scores['S']}分")
     with c2: st.metric("❌ 劣势", f"{avg_w:.1f}/5.0", f"{scores['W']}分")
