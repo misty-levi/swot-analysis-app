@@ -395,18 +395,6 @@ st.markdown(
         }
     }
 
-    @media screen and (max-width: 768px) {
-        /* 利用我们打的空标记 <div id="swot-metrics-row"></div> */
-        #swot-metrics-row + div[data-testid="stHorizontalBlock"] {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 0.6rem !important;
-        }
-        #swot-metrics-row + div[data-testid="stHorizontalBlock"] > div {
-            width: 100% !important;
-        }
-    }
-    
     /* 新增：联系方式卡片的动画效果 */
     @keyframes rotate {
         0% { transform: rotate(0deg); }
