@@ -417,6 +417,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import time
+import time
+# 确保样式完全加载
+time.sleep(0.1)
 
 # 定义测试题库（与之前相同）
 questions = [
