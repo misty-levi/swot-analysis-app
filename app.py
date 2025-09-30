@@ -503,7 +503,7 @@ if 'test_complete' not in st.session_state:
 
 def main():
     # 页面标题
-    st.title("🎓 专升本学员SWOT智能分析系统")
+    st.title("🎓 福建专升本SWOT个人分析Lite版")
     st.markdown("---")
     
     if not st.session_state.test_complete:
@@ -514,6 +514,29 @@ def main():
         show_results_interface()
 
 def show_test_interface():
+    # 在移动端调整布局顺序
+    st.markdown("""
+    <style>
+    @media screen and (max-width: 768px) {
+        /* 移动端调整测试说明和问题的显示顺序 */
+        .mobile-reorder {
+            display: flex;
+            flex-direction: column;
+        }
+        .mobile-reorder > :nth-child(1) {
+            order: 2; /* 问题内容放在第二 */
+        }
+        .mobile-reorder > :nth-child(2) {
+            order: 1; /* 测试说明放在第一 */
+            margin-bottom: 1.5rem;
+        }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # 创建外层容器用于移动端重新排序
+    st.markdown('<div class="mobile-reorder">', unsafe_allow_html=True)
+    
     col1, col2 = st.columns([3, 1])
     
     with col1:
@@ -565,7 +588,10 @@ def show_test_interface():
         - 真实作答效果最佳
         - 完成后生成详细分析报告
         """)
-
+    
+    # 关闭外层容器
+    st.markdown('</div>', unsafe_allow_html=True)
+    
 def show_results_interface():
     res = st.session_state.scorer.get_results()
     scores, details = res["scores"], res["details"]
