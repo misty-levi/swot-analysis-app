@@ -393,6 +393,19 @@ st.markdown(
         .contact-icon {
             font-size: 2rem !important;
         }
+        
+        /* 新增：在移动端调整测试界面的列顺序 */
+        .row-widget.stColumns {
+            display: flex;
+            flex-direction: column;
+        }
+        .row-widget.stColumns > div:nth-child(1) {
+            order: 2;
+        }
+        .row-widget.stColumns > div:nth-child(2) {
+            order: 1;
+            margin-bottom: 1.5rem;
+        }
     }
 
     /* 新增：联系方式卡片的动画效果 */
@@ -416,7 +429,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import time
 import time
 # 确保样式完全加载
 time.sleep(0.1)
@@ -514,30 +526,17 @@ def main():
         show_results_interface()
 
 def show_test_interface():
-    # 在移动端调整布局顺序
-    st.markdown("""
-    <style>
-    @media screen and (max-width: 768px) {
-        /* 移动端调整测试说明和问题的显示顺序 */
-        .mobile-reorder {
-            display: flex;
-            flex-direction: column;
-        }
-        .mobile-reorder > :nth-child(1) {
-            order: 2; /* 问题内容放在第二 */
-        }
-        .mobile-reorder > :nth-child(2) {
-            order: 1; /* 测试说明放在第一 */
-            margin-bottom: 1.5rem;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # 创建外层容器用于移动端重新排序
-    st.markdown('<div class="mobile-reorder">', unsafe_allow_html=True)
-    
     col1, col2 = st.columns([3, 1])
+    
+    # 在移动端，col2（测试说明）会显示在col1（问题内容）之前
+    with col2:
+        st.info("""
+        ### 📝 测试说明
+        - 共有20道题目
+        - 请根据第一感觉选择
+        - 真实作答效果最佳
+        - 完成后生成详细分析报告
+        """)
     
     with col1:
         current_idx = st.session_state.current_question
@@ -579,18 +578,6 @@ def show_test_interface():
                     else:
                         st.session_state.test_complete = True
                         st.rerun()
-    
-    with col2:
-        st.info("""
-        ### 📝 测试说明
-        - 共有20道题目
-        - 请根据第一感觉选择
-        - 真实作答效果最佳
-        - 完成后生成详细分析报告
-        """)
-    
-    # 关闭外层容器
-    st.markdown('</div>', unsafe_allow_html=True)
     
 def show_results_interface():
     res = st.session_state.scorer.get_results()
